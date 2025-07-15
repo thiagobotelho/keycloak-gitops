@@ -6,6 +6,7 @@ metadata:
   labels:
     app: postgres
 spec:
+  storageClassName: crc-csi-hostpath-provisioner-immediate
   accessModes:
     - ReadWriteOnce                     
   resources:
