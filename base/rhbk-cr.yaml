@@ -1,0 +1,97 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-db-secret
+  namespace: keycloak-dev
+  labels:
+    app: keycloak
+type: Opaque
+stringData:
+  username: testuser
+  password: testpassword
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: example-tls-secret
+  namespace: keycloak-dev
+  labels:
+    app: keycloak
+type: kubernetes.io/tls
+data:
+  tls.crt: |
+    $(echo "-----BEGIN CERTIFICATE-----
+    MIIDZzCCAk+gAwIBAgIUYZg2vJzFZ4k1vBtuWe0NDlKE4a0wDQYJKoZIhvcNAQEL
+    BQAwQzEbMBkGA1UEAwwSKi5hcHBzLWNyYy50ZXN0aW5nMRcwFQYDVQQKDA5UZXN0
+    IEtleWNsb2FrLjELMAkGA1UEBhMCVVMwHhcNMjUwNzE1MTUzMzU1WhcNMjYwNzE1
+    MTUzMzU1WjBDMRswGQYDVQQDDBIqLmFwcHMtY3JjLnRlc3RpbmcxFzAVBgNVBAoM
+    DlRlc3QgS2V5Y2xvYWsuMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQAD
+    ggEPADCCAQoCggEBALtXTnk5QKpLqQws1l632SSz3xXye1EO+yJmAEbE3JVEL/Kx
+    RiZ1uGTbQU6SbBk4SCBTmKkr/A15isXLc5G6U487+QsdsAQDYPLF2bvgseu/y335
+    9ty6Z7FPFUJgDVMOrJupEmxW73gONSS7Qh+mBRXKEjRknvrxYefz2wda5iATVQPY
+    e7nVxXkJ4nZKmV2mGG6lsD9MmHxOZ91ia1g4IhxfcRAwQ7zR4paiDg8jWvz7MJEt
+    w9QBtBrEoYQBK0EH3yD9ACcAt634OMcjfiOcz87zldlm7jJaTsOr0kAJPkTomo73
+    55a8lDKtPbyoqJv2FNyoIBSgQ3upR+ta/5RpwhkCAwEAAaNTMFEwHQYDVR0OBBYE
+    FHj82QJ/zyg39llDy64gMDZK8u3rMB8GA1UdIwQYMBaAFHj82QJ/zyg39llDy64g
+    MDZK8u3rMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAJkE38iW
+    U5qUizPMOMSPM3zSVXe87nG7xfCw5UVQRHq4I0XDGIrILCllcNfEuWTnSjeiuqn6
+    vVlUwahdozkEojGiXE1kv8yRha/DTwIQxbUM8T7mOCVz13InJcBv2tRwECuNG9So
+    f36n4Bkbms0LVBfhKR+gwn8rKRu4qNnu0uG8ZykQLrylTFSXdNSvAzTj2DLWznjo
+    h7s5UHSiDECN/h2Ff3kWMA2LdE6U5LC3GbYeANLtgAZlCYsqEIiBKvD6RGJGQdo8
+    wBh2tWHEkGQRRYp2j2m9w0/dXZvyADI13EhTTqq0Y19OeaYhg9su6si6hnMRcfGP
+    ShUmFwk0t0IWPGY=
+    -----END CERTIFICATE-----" | base64 -w0)
+  tls.key: |
+    $(echo "-----BEGIN PRIVATE KEY-----
+    MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC7V055OUCqS6kM
+    LNZet9kks98V8ntRDvsiZgBGxNyVRC/ysUYmdbhk20FOkmwZOEggU5ipK/wNeYrF
+    y3ORulOPO/kLHbAEA2Dyxdm74LHrv8t9+fbcumexTxVCYA1TDqybqRJsVu94DjUk
+    u0IfpgUVyhI0ZJ768WHn89sHWuYgE1UD2Hu51cV5CeJ2SpldphhupbA/TJh8Tmfd
+    YmtYOCIcX3EQMEO80eKWog4PI1r8+zCRLcPUAbQaxKGEAStBB98g/QAnALet+DjH
+    I34jnM/O85XZZu4yWk7Dq9JACT5E6JqO9+eWvJQyrT28qKib9hTcqCAUoEN7qUfr
+    Wv+UacIZAgMBAAECggEABU2nKczaXQfHyRGy3tsPAVg7MjybS5PkPZjMHLTBdtNH
+    lTP6A6g0+FvxmRcRitQ6THn5Wh6l477DVC6afq9a4rTkq7EjNLXgxnad35DwkHct
+    PEt5ds2rFkyiEi80aVvCvKRYYmtCm7AxRnErocg6ICAIjGWlz35KUn3nfymOVq2R
+    BKtMBSUCJmFPhiMEirMOdsjq7Vf3GgbsVznAQ/5LaCxjCbGUZwGoYX4SI9Gt453/
+    70/ubkNajpIP+XBARJ0RZ+PyjqfjfgmfXsrgQw6jeIJEzIWPj/0q37V36Ldq6N4/
+    /acIg/40casjBphkW608EryHnWVeAHip+57MSP/3oQKBgQDhv30SgCR4vKtGG1nv
+    eL1yRHMu3pSXPn+Y38jga2B2Vtl2MN2n0024YVRuLRpje6bsNV+LbwY20OCl6PlQ
+    gHSfG0vC7FUAjqZXKNIkBehvEZ/Bac0nzWCRAkt4tx0go8KnggGCVd43ponLiDTk
+    9RLLpA1MAr2maExLu541XdQKiQKBgQDUcjqLSBu3Runr8kV3ZUHna4QPklcB94je
+    FGOxzcCs6hV1A5jUwDcmOGoiklaOP9XUVttC0fPj9hTkmJ6KxekKa4v9bjdfPCSr
+    OpadJv95LWiflNeMBOevE6w56Q3WCzzxlKtOuTJ5IM7eLplfQcy5plvtTBVoJT5/
+    D+1f0ZzXEQKBgHn4LQpe49W8EknpozjoomrnotgS+HOTF/uwBWeDfHXTzOC33Dq9
+    xwM0yxpQEi7n8zMyTzIVxWS+jHH3oySkkt4YMGHbsL2BVUxISOmfq4q/GfK1SFwV
+    8fPHKqHJRdqJwDUi38/ctxiYSWEHcZS2+PW/6FNGM9OCDJ7qertYu6UJAoGADIdk
+    DnzFLazf9MtH73+oQFal5ikyOmp3xuka7Ax/VXNEqq74n2tqlTV0hO9ubVs0aB5r
+    Neid4o7LsqORjguX78Zh7iNG3rX0T6jX4xK+tE3KQscLYzWS2E9ns86bw0jMYk7r
+    P2xKnrwhlxbWcri1sykteLQo+whfRC0TSbhZ8JECgYBEvBPwE6btI8QmpSC2Ocfm
+    gerGaQODHxjMmrSQMLe3nbJTu2VNupkLTruaD+H6zHJJNVWSLXgEs/OeaAPi8I7R
+    oZks0t0D93vlzQpfV62KAhHuIjMmpZpmxaAuNsvt2PrsRZSvVA6pA+P7tGBQwbft
+    Hyf2YN3F+uw72S3Wm1oILA==
+    -----END PRIVATE KEY-----" | base64 -w0)
+
+---
+apiVersion: k8s.keycloak.org/v2alpha1   
+kind: Keycloak                        
+metadata:
+  name: keycloak-dev                 
+spec:
+  instances: 1                       
+  db:
+    vendor: postgres                 
+    host: postgres-db             
+    usernameSecret:                   
+      name: keycloak-db-secret        
+      key: username                    
+    passwordSecret:                   
+      name: keycloak-db-secret        
+      key: password                    
+  http:
+    tlsSecret: example-tls-secret     
+  hostname:
+    hostname: keycloak-dev.apps-crc.testing
+  proxy:
+    headers: xforwarded                

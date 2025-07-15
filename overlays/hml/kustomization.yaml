@@ -1,0 +1,4 @@
+namespace: keycloak-dev
+
+resources:
+  - ../../base
