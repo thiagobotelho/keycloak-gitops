@@ -2,19 +2,6 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: keycloak-db-secret
-  namespace: keycloak-dev
-  labels:
-    app: keycloak
-type: Opaque
-stringData:
-  username: testuser
-  password: testpassword
-
----
-apiVersion: v1
-kind: Secret
-metadata:
   name: example-tls-secret
   namespace: keycloak-dev
   labels:
@@ -72,6 +59,19 @@ data:
     oZks0t0D93vlzQpfV62KAhHuIjMmpZpmxaAuNsvt2PrsRZSvVA6pA+P7tGBQwbft
     Hyf2YN3F+uw72S3Wm1oILA==
     -----END PRIVATE KEY-----" | base64 -w0)
+    
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-db-secret
+  namespace: keycloak-dev
+  labels:
+    app: keycloak
+type: Opaque
+stringData:
+  username: testuser
+  password: testpassword
 
 ---
 apiVersion: k8s.keycloak.org/v2alpha1   
