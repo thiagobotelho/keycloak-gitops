@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rhbk-service-monitor
+  namespace: keycloak-dev
+spec:
+  endpoints:
+    - interval: 30s
+      path: /metrics
+      port: https
+      scheme: https
+      tlsConfig:
+        ca:
+          secret:
+            key: tls.crt
+            name: example-tls-secret
+        serverName: keycloak-dev-service.keycloak-dev.svc.cluster.local
+  selector:
+    matchLabels:
+      app: keycloak
