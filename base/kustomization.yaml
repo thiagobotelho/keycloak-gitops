@@ -2,4 +2,3 @@ resources:
   - namespace.yaml
   - postgresql.yaml
   - keycloak.yaml
-  - servicemonitor.yaml
