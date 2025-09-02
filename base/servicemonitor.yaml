@@ -4,10 +4,12 @@ metadata:
   name: rhbk-service-monitor
   namespace: keycloak-dev
 spec:
+  scrapeProtocols:
+    - OpenMetricsText1.0.0
   endpoints:
     - interval: 30s
       path: /metrics
-      port: https
+      port: management
       scheme: https
       tlsConfig:
         ca:
