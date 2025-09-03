@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: rhbk-service-monitor
-  namespace: keycloak-{{ENV}}
+  namespace: keycloak-ENV
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:

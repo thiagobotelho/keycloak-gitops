@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
-  namespace: keycloak-{{ENV}}
+  namespace: keycloak-ENV
   annotations:
     argocd.argoproj.io/sync-wave: "1"
   labels:
@@ -21,7 +21,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgresql-db
-  namespace: keycloak-{{ENV}}
+  namespace: keycloak-ENV
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
@@ -64,7 +64,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-db
-  namespace: keycloak-{{ENV}}
+  namespace: keycloak-ENV
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
