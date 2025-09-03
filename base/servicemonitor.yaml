@@ -2,7 +2,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: rhbk-service-monitor
-  namespace: keycloak-dev
+  namespace: keycloak-{{ENV}}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   scrapeProtocols:
     - OpenMetricsText1.0.0
@@ -16,7 +18,7 @@ spec:
           secret:
             key: tls.crt
             name: example-tls-secret
-        serverName: keycloak-dev-service.keycloak-dev.svc.cluster.local
+        serverName: keycloak-{{ENV}}-service.keycloak-{{ENV}}.svc.cluster.local
   selector:
     matchLabels:
       app: keycloak

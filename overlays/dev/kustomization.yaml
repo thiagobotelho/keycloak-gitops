@@ -1,4 +1,70 @@
-namespace: keycloak-dev
-
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
 resources:
   - ../../base
+
+configMapGenerator:
+  - name: env-cfg
+    literals:
+      - ENV=dev
+      - SERVER_NAME=keycloak-dev-management.keycloak-dev.svc.cluster.local
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: env-cfg
+      fieldPath: data.ENV
+    targets:
+      - select:
+          kind: Namespace
+        fieldPaths:
+          - metadata.name
+      - select:
+          kind: OperatorGroup
+        fieldPaths:
+          - metadata.namespace
+          - spec.targetNamespaces.0
+      - select:
+          kind: Subscription
+        fieldPaths:
+          - metadata.namespace
+      - select:
+          kind: PersistentVolumeClaim
+        fieldPaths:
+          - metadata.namespace
+      - select:
+          kind: StatefulSet
+          name: postgresql-db
+        fieldPaths:
+          - metadata.namespace
+      - select:
+          kind: Service
+          name: postgres-db
+        fieldPaths:
+          - metadata.namespace
+      - select:
+          kind: Secret
+        fieldPaths:
+          - metadata.namespace
+      - select:
+          kind: ServiceMonitor
+        fieldPaths:
+          - metadata.namespace
+      - select:
+          kind: Keycloak
+        fieldPaths:
+          - metadata.name
+          - metadata.namespace
+          - spec.hostname.hostname
+  - source:
+      kind: ConfigMap
+      name: env-cfg
+      fieldPath: data.SERVER_NAME
+    targets:
+    - select:
+        kind: ServiceMonitor
+        name: rhbk-service-monitor
+      fieldPaths:
+        - spec.endpoints.0.tlsConfig.serverName
+
+
