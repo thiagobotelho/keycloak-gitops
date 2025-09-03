@@ -9,8 +9,9 @@ namespace: keycloak-dev
 configMapGenerator:
   - name: env-cfg
     literals:
-      - ENV=dev
+      - ENV=keycloak-dev
       - SERVER_NAME=keycloak-dev-management.keycloak-dev.svc.cluster.local
+      - KEYCLOAK_HOSTNAME=keycloak-dev.apps-crc.testing
 
 replacements:
   - source:
@@ -58,7 +59,6 @@ replacements:
         fieldPaths:
           - metadata.name
           - metadata.namespace
-          - spec.hostname.hostname
   - source:
       kind: ConfigMap
       name: env-cfg
@@ -69,5 +69,14 @@ replacements:
         name: rhbk-service-monitor
       fieldPaths:
         - spec.endpoints.0.tlsConfig.serverName
+  - source:
+      kind: ConfigMap
+      name: env-cfg
+      fieldPath: data.KEYCLOAK_HOSTNAME
+    targets:
+    - select:
+        kind: Keycloak
+      fieldPaths:
+        - spec.hostname.hostname
 
 
