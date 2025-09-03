@@ -9,13 +9,19 @@ Este repositório adota o padrão `kustomize` para separação de ambientes:
 ```
 keycloak-gitops/
 ├── base/
+│   ├── kustomization.yaml
 │   ├── namespace.yaml
+│   ├── operator.yaml
 │   ├── postgresql.yaml
-│   └── keycloak.yaml
-├── overlays/
-│   ├── dev/
-│   ├── uat/
-│   └── prd/
+│   ├── keycloak.yaml
+│   └── servicemonitor.yaml
+└── overlays/
+    ├── dev/
+    │   └── kustomization.yaml
+    ├── uat/
+    │   └── kustomization.yaml
+    └── prd/
+        └── kustomization.yaml
 ```
 
 ## ⚙️ Componentes
