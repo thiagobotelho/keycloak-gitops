@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-db-secret
+  labels:
+    app: postgres
+type: Opaque
+stringData:
+  username: testuser
+  password: testpassword
+  database: keycloak
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -13,49 +25,7 @@ spec:
     - ReadWriteOnce                     
   resources:
     requests:
-      storage: 1Gi                 
-
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: postgresql-db
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
-spec:
-  serviceName: postgresql-db-service   
-  replicas: 1                         
-  selector:
-    matchLabels:
-      app: postgresql-db
-  template:
-    metadata:
-      labels:
-        app: postgresql-db
-    spec:
-      containers:
-        - name: postgresql-db
-          image: postgres:15           
-          volumeMounts:
-            - mountPath: /data         
-              name: cache-volume       
-          env:
-            - name: POSTGRES_USER
-              value: testuser          
-            - name: POSTGRES_PASSWORD
-              value: testpassword      
-            - name: PGDATA
-              value: /data/pgdata      
-            - name: POSTGRES_DB
-              value: keycloak          
-  volumeClaimTemplates:
-    - metadata:
-        name: cache-volume
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 1Gi
+      storage: 1Gi 
 
 ---
 apiVersion: v1
@@ -70,4 +40,60 @@ spec:
   type: LoadBalancer                    
   ports:
     - port: 5432                        
-      targetPort: 5432
+      targetPort: 5432                
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql-db
+  labels:
+    app: postgresql-db
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  serviceName: postgresql-db-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql-db
+  template:
+    metadata:
+      labels:
+        app: postgresql-db
+    spec:
+      containers:
+        - name: postgresql-db
+          image: postgres:15
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: database
+            - name: PGDATA
+              value: /data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
