@@ -12,23 +12,6 @@ stringData:
 
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-pvc
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
-  labels:
-    app: postgres
-spec:
-  storageClassName: crc-csi-hostpath-provisioner-immediate
-  accessModes:
-    - ReadWriteOnce                     
-  resources:
-    requests:
-      storage: 1Gi 
-
----
-apiVersion: v1
 kind: Service
 metadata:
   name: postgres-db
@@ -52,7 +35,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
-  serviceName: postgresql-db-service
+  serviceName: postgresql-db
   replicas: 1
   selector:
     matchLabels:
