@@ -26,39 +26,11 @@ replacements:
       - select:
           kind: OperatorGroup
         fieldPaths:
-          - metadata.namespace
           - spec.targetNamespaces.0
-      - select:
-          kind: Subscription
-        fieldPaths:
-          - metadata.namespace
-      - select:
-          kind: PersistentVolumeClaim
-        fieldPaths:
-          - metadata.namespace
-      - select:
-          kind: StatefulSet
-          name: postgresql-db
-        fieldPaths:
-          - metadata.namespace
-      - select:
-          kind: Service
-          name: postgres-db
-        fieldPaths:
-          - metadata.namespace
-      - select:
-          kind: Secret
-        fieldPaths:
-          - metadata.namespace
-      - select:
-          kind: ServiceMonitor
-        fieldPaths:
-          - metadata.namespace
       - select:
           kind: Keycloak
         fieldPaths:
           - metadata.name
-          - metadata.namespace
   - source:
       kind: ConfigMap
       name: env-cfg
