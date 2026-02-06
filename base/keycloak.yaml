@@ -21,6 +21,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
+  image: quay.io/thiagobotelho/rhbk-keycloak-custom:dev
   instances: 1
   update:
     strategy: Auto
