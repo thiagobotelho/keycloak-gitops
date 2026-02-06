@@ -10,10 +10,6 @@ ENV KC_HEALTH_ENABLED=true \
     KC_TRACING_SAMPLER_TYPE=parentbased_traceidratio
 
 # Copiando os Themes
-COPY --chown=keycloak:keycloak --chmod=644 themes/banestes-devportal.jar /opt/keycloak/providers/
-COPY --chown=keycloak:keycloak --chmod=644 themes/banestes-interno.jar /opt/keycloak/providers/
-COPY --chown=keycloak:keycloak --chmod=644 themes/banestes-portal-correspondente.jar /opt/keycloak/providers/
-COPY --chown=keycloak:keycloak --chmod=644 themes/banestes-portal-pix.jar /opt/keycloak/providers/
 COPY --chown=keycloak:keycloak --chmod=644 themes/banseg-corretores-theme.jar /opt/keycloak/providers/
 COPY --chown=keycloak:keycloak --chmod=644 themes/banseg-segurados-theme.jar /opt/keycloak/providers/
 
