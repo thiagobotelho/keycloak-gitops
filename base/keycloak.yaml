@@ -32,6 +32,8 @@ spec:
           - name: keycloak                  
             imagePullPolicy: Always
             env:
+              - name: KC_LOG_LEVEL
+                value: 'debug'
               - name: TZ
                 value: America/Sao_Paulo                     
               - name: KC_METRICS_ENABLED
