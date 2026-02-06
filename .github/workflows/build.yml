@@ -35,6 +35,23 @@ jobs:
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Validate variables
+        run: |
+          if [ -z "${ORG}" ]; then
+            echo "ERROR: QUAY_ORG is empty. Configure secrets.QUAY_ORG with your Quay namespace (ex: thiagobotelho)."
+            exit 1
+          fi
+          echo "Image: ${REGISTRY}/${ORG}/${IMAGE_NAME}:${TAG}"
+
+      # 🔐 Necessário para puxar a base image do RHBK
+      - name: Login registry.redhat.io
+        uses: docker/login-action@v3
+        with:
+          registry: registry.redhat.io
+          username: ${{ secrets.RHDN_USERNAME }}
+          password: ${{ secrets.RHDN_PASSWORD }}
+
+      # 🔐 Push no Quay
       - name: Login Quay.io
         uses: docker/login-action@v3
         with:
