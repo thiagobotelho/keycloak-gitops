@@ -2,7 +2,8 @@
 FROM registry.redhat.io/rhbk/keycloak-rhel9:26.2 AS builder
 
 # Variáveis de ambiente
-ENV KC_HEALTH_ENABLED=true \
+ENV KC_DB=postgres \
+    KC_HEALTH_ENABLED=true \
     KC_METRICS_ENABLED=true \
     KC_EVENT_METRICS_USER_ENABLED=true \
     KC_FEATURES=opentelemetry \
