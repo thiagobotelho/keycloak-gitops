@@ -30,7 +30,7 @@ spec:
       spec:
         containers:
           - name: keycloak                  
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             env:
               - name: TZ
                 value: America/Sao_Paulo                     
