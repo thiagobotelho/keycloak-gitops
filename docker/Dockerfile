@@ -11,8 +11,8 @@ ENV KC_DB=postgres \
     KC_TRACING_SAMPLER_TYPE=parentbased_traceidratio
 
 # Copiando os Themes
-COPY --chown=keycloak:keycloak --chmod=644 themes/banseg-corretores-theme.jar /opt/keycloak/providers/
-COPY --chown=keycloak:keycloak --chmod=644 themes/banseg-segurados-theme.jar /opt/keycloak/providers/
+#COPY --chown=keycloak:keycloak --chmod=644 themes/theme1.jar /opt/keycloak/providers/
+#COPY --chown=keycloak:keycloak --chmod=644 themes/theme2.jar /opt/keycloak/providers/
 
 # Compilando a imagem customizada do Keycloak
 RUN /opt/keycloak/bin/kc.sh build
