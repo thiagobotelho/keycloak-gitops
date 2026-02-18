@@ -25,17 +25,15 @@ jobs:
       ORG: ${{ secrets.QUAY_ORG }}
       IMAGE_NAME: rhbk-keycloak-custom
       CONTEXT_DIR: docker
+      # Prioridade: input manual > tag Git > branch > dev
       TAG: ${{ github.event.inputs.tag || (startsWith(github.ref, 'refs/tags/') && github.ref_name) || github.ref_name || 'dev' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Buildx ok, mas vamos fixar driver e evitar variações
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker-container
 
       - name: Validate variables
         run: |
@@ -45,6 +43,7 @@ jobs:
           fi
           echo "Image: ${REGISTRY}/${ORG}/${IMAGE_NAME}:${TAG}"
 
+      # 🔐 Necessário para puxar a base image do RHBK
       - name: Login registry.redhat.io
         uses: docker/login-action@v3
         with:
@@ -52,6 +51,7 @@ jobs:
           username: ${{ secrets.RHDN_USERNAME }}
           password: ${{ secrets.RHDN_PASSWORD }}
 
+      # 🔐 Push no Quay
       - name: Login Quay.io
         uses: docker/login-action@v3
         with:
@@ -59,26 +59,15 @@ jobs:
           username: ${{ secrets.QUAY_USERNAME }}
           password: ${{ secrets.QUAY_PASSWORD }}
 
-      - name: Build & Push (single-manifest, docker v2s2)
+      - name: Build & Push
         uses: docker/build-push-action@v6
         with:
           context: ${{ env.CONTEXT_DIR }}
           file: ${{ env.CONTEXT_DIR }}/Dockerfile
           push: true
-
-          # single-arch
           platforms: linux/amd64
-
           tags: |
             ${{ env.REGISTRY }}/${{ env.ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
             ${{ env.REGISTRY }}/${{ env.ORG }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
-
-          # força mediatypes Docker (evita OCI index "See Child Manifests")
-          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.ORG }}/${{ env.IMAGE_NAME }},push=true,oci-mediatypes=false
-
-          # reduz metadata extra no manifest
-          provenance: false
-          sbom: false
-
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.ORG }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.ORG }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
