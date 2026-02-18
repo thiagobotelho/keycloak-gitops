@@ -18,7 +18,7 @@ COPY --chown=keycloak:keycloak --chmod=644 themes/theme2.jar /opt/keycloak/provi
 RUN /opt/keycloak/bin/kc.sh build
 
 # Etapa final da imagem
-FROM registry.redhat.io/rhbk/keycloak-rhel9:26.2
+FROM registry.redhat.io/rhbk/keycloak-rhel9:26.2-15
 
 # Copiando o resultado do build
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
