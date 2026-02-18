@@ -61,7 +61,7 @@ spec:
               - name: KC_TRACING_SAMPLER_RATIO
                 value: "0.2"                                  
               - name: KC_TRACING_ENDPOINT
-                value: 'http://tempo-tempo-monolithic.openshift-tempo-operator.svc.cluster.local:4317'          
+                value: 'http://tempo-tempo-monolithic.openshift-tempo-operator.svc.cluster.local:4318'          
   db:
     vendor: postgres                 
     host: postgres-db             
