@@ -33,7 +33,7 @@ spec:
             imagePullPolicy: Always
             env:
               - name: KC_LOG_LEVEL
-                value: 'trace'
+                value: 'info'
               - name: TZ
                 value: America/Sao_Paulo                     
               - name: KC_METRICS_ENABLED
@@ -61,7 +61,7 @@ spec:
               - name: KC_TRACING_SAMPLER_RATIO
                 value: "0.2"                                  
               - name: KC_TRACING_ENDPOINT
-                value: 'http://tempo-tempo-monolithic.openshift-tempo-operator.svc:4317'          
+                value: 'tempo-tempo-monolithic.openshift-tempo-operator.svc:4317'          
   db:
     vendor: postgres                 
     host: postgres-db             
