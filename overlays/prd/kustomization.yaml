@@ -10,7 +10,8 @@ configMapGenerator:
   - name: env-cfg
     literals:
       - ENV=keycloak-prd
-      - SERVER_NAME=keycloak-prd-management.keycloak-prd.svc.cluster.local
+      - KEYCLOAK_HOSTNAME=keycloak-prd.apps-crc.testing
+      - SERVICE_NAME=keycloak-prd-service
 
 replacements:
   - source:
@@ -33,10 +34,24 @@ replacements:
   - source:
       kind: ConfigMap
       name: env-cfg
-      fieldPath: data.SERVER_NAME
+      fieldPath: data.KEYCLOAK_HOSTNAME
     targets:
       - select:
-          kind: ServiceMonitor
-          name: rhbk-service-monitor
-        fieldPaths:
-          - spec.endpoints.0.tlsConfig.serverName
+          kind: Keycloak
+        fieldPaths: [spec.hostname.hostname]
+      - select:
+          kind: Route
+          name: keycloak
+        fieldPaths: [spec.host]
+  - source:
+      kind: ConfigMap
+      name: env-cfg
+      fieldPath: data.SERVICE_NAME
+    targets:
+      - select:
+          kind: Keycloak
+        fieldPaths: [spec.telemetry.serviceName]
+      - select:
+          kind: Route
+          name: keycloak
+        fieldPaths: [spec.to.name]

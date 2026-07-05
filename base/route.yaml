@@ -1,0 +1,17 @@
+# Somente a porta da aplicação é publicada; management/9000 permanece interna.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: keycloak
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  host: keycloak-ENV.apps-crc.testing
+  to:
+    kind: Service
+    name: keycloak-ENV-service
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

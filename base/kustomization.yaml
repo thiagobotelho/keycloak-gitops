@@ -3,8 +3,12 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
-  - operator.yaml
-  - subscription.yaml
+  # Operator e CRDs oficiais, imutavelmente pinados na versão do servidor.
+  - https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/26.6.4/kubernetes/keycloaks.k8s.keycloak.org-v1.yml
+  - https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/26.6.4/kubernetes/keycloakrealmimports.k8s.keycloak.org-v1.yml
+  - https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/26.6.4/kubernetes/kubernetes.yml
   - postgresql.yaml
   - keycloak.yaml
+  - route.yaml
   - servicemonitor.yaml
+  - prometheusrule.yaml

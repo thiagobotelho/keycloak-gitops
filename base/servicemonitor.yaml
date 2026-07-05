@@ -11,13 +11,8 @@ spec:
     - interval: 30s
       path: /metrics
       port: management
-      scheme: https
-      tlsConfig:
-        ca:
-          secret:
-            key: tls.crt
-            name: example-tls-secret
-        serverName: keycloak-ENV-service.keycloak-ENV.svc.cluster.local
+      scheme: http
+      scrapeTimeout: 10s
   selector:
     matchLabels:
       app: keycloak

@@ -1,27 +1,28 @@
-# Etapa de build com Keycloak customizado
-FROM registry.redhat.io/rhbk/keycloak-rhel9:26.2 AS builder
+# A versão do builder, Operator e CR deve avançar em conjunto.
+ARG KEYCLOAK_VERSION=26.6.4
+FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} AS builder
 
-# Variáveis de ambiente
+# Opções de build: PostgreSQL, health, métricas, tracing e event metrics.
 ENV KC_DB=postgres \
     KC_HEALTH_ENABLED=true \
     KC_METRICS_ENABLED=true \
-    KC_EVENT_METRICS_USER_ENABLED=true \
-    KC_FEATURES=opentelemetry \
     KC_TRACING_ENABLED=true \
-    KC_TRACING_SAMPLER_TYPE=parentbased_traceidratio
+    KC_FEATURES=opentelemetry,user-event-metrics
 
-# Copiando os Themes
 COPY --chown=keycloak:keycloak --chmod=644 themes/theme1.jar /opt/keycloak/providers/
 COPY --chown=keycloak:keycloak --chmod=644 themes/theme2.jar /opt/keycloak/providers/
 
-# Compilando a imagem customizada do Keycloak
-RUN /opt/keycloak/bin/kc.sh build
+# Evita falso positivo de alteração do provider no start --optimized.
+RUN touch -m --date=@1743465600 /opt/keycloak/providers/* && \
+    /opt/keycloak/bin/kc.sh build
 
-# Etapa final da imagem
-FROM registry.redhat.io/rhbk/keycloak-rhel9:26.2-15
+ARG KEYCLOAK_VERSION=26.6.4
+FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
 
-# Copiando o resultado do build
+LABEL org.opencontainers.image.title="Keycloak customizado" \
+      org.opencontainers.image.version="${KEYCLOAK_VERSION}" \
+      org.opencontainers.image.source="https://github.com/thiagobotelho/keycloak-gitops"
+
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
-# Definindo ponto de entrada padrão
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]

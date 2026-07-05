@@ -1,19 +1,5 @@
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: example-tls-secret
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
-  labels:
-    app: keycloak
-type: kubernetes.io/tls
-data:
-  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURaekNDQWsrZ0F3SUJBZ0lVWVpnMnZKekZaNGsxdkJ0dVdlME5EbEtFNGEwd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1F6RWJNQmtHQTFVRUF3d1NLaTVoY0hCekxXTnlZeTUwWlhOMGFXNW5NUmN3RlFZRFZRUUtEQTVVWlhOMApJRXRsZVdOc2IyRnJMakVMTUFrR0ExVUVCaE1DVlZNd0hoY05NalV3TnpFMU1UVXpNelUxV2hjTk1qWXdOekUxCk1UVXpNelUxV2pCRE1Sc3dHUVlEVlFRRERCSXFMbUZ3Y0hNdFkzSmpMblJsYzNScGJtY3hGekFWQmdOVkJBb00KRGxSbGMzUWdTMlY1WTJ4dllXc3VNUXN3Q1FZRFZRUUdFd0pWVXpDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRApnZ0VQQURDQ0FRb0NnZ0VCQUx0WFRuazVRS3BMcVF3czFsNjMyU1N6M3hYeWUxRU8reUptQUViRTNKVkVML0t4ClJpWjF1R1RiUVU2U2JCazRTQ0JUbUtrci9BMTVpc1hMYzVHNlU0ODcrUXNkc0FRRFlQTEYyYnZnc2V1L3kzMzUKOXR5Nlo3RlBGVUpnRFZNT3JKdXBFbXhXNzNnT05TUzdRaCttQlJYS0VqUmtudnJ4WWVmejJ3ZGE1aUFUVlFQWQplN25WeFhrSjRuWkttVjJtR0c2bHNEOU1tSHhPWjkxaWExZzRJaHhmY1JBd1E3elI0cGFpRGc4ald2ejdNSkV0Cnc5UUJ0QnJFb1lRQkswRUgzeUQ5QUNjQXQ2MzRPTWNqZmlPY3o4N3psZGxtN2pKYVRzT3Iwa0FKUGtUb21vNzMKNTVhOGxES3RQYnlvcUp2MkZOeW9JQlNnUTN1cFIrdGEvNVJwd2hrQ0F3RUFBYU5UTUZFd0hRWURWUjBPQkJZRQpGSGo4MlFKL3p5ZzM5bGxEeTY0Z01EWks4dTNyTUI4R0ExVWRJd1FZTUJhQUZIajgyUUovenlnMzlsbER5NjRnCk1EWks4dTNyTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3RFFZSktvWklodmNOQVFFTEJRQURnZ0VCQUprRTM4aVcKVTVxVWl6UE1PTVNQTTN6U1ZYZTg3bkc3eGZDdzVVVlFSSHE0STBYREdJcklMQ2xsY05mRXVXVG5TamVpdXFuNgp2VmxVd2FoZG96a0VvakdpWEUxa3Y4eVJoYS9EVHdJUXhiVU04VDdtT0NWejEzSW5KY0J2MnRSd0VDdU5HOVNvCmYzNm40QmtibXMwTFZCZmhLUitnd244cktSdTRxTm51MHVHOFp5a1FMcnlsVEZTWGROU3ZBelRqMkRMV3puam8KaDdzNVVIU2lERUNOL2gyRmYza1dNQTJMZEU2VTVMQzNHYlllQU5MdGdBWmxDWXNxRUlpQkt2RDZSR0pHUWRvOAp3QmgydFdIRWtHUVJSWXAyajJtOXcwL2RYWnZ5QURJMTNFaFRUcXEwWTE5T2VhWWhnOXN1NnNpNmhuTVJjZkdQClNoVW1Gd2swdDBJV1BHWT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
-  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktZd2dnU2lBZ0VBQW9JQkFRQzdWMDU1T1VDcVM2a00KTE5aZXQ5a2tzOThWOG50UkR2c2laZ0JHeE55VlJDL3lzVVltZGJoazIwRk9rbXdaT0VnZ1U1aXBLL3dOZVlyRgp5M09SdWxPUE8va0xIYkFFQTJEeXhkbTc0TEhydjh0OStmYmN1bWV4VHhWQ1lBMVREcXlicVJKc1Z1OTREalVrCnUwSWZwZ1VWeWhJMFpKNzY4V0huODlzSFd1WWdFMVVEMkh1NTFjVjVDZUoyU3BsZHBoaHVwYkEvVEpoOFRtZmQKWW10WU9DSWNYM0VRTUVPODBlS1dvZzRQSTFyOCt6Q1JMY1BVQWJRYXhLR0VBU3RCQjk4Zy9RQW5BTGV0K0RqSApJMzRqbk0vTzg1WFpadTR5V2s3RHE5SkFDVDVFNkpxTzkrZVd2SlF5clQyOHFLaWI5aFRjcUNBVW9FTjdxVWZyCld2K1VhY0laQWdNQkFBRUNnZ0VBQlUybktjemFYUWZIeVJHeTN0c1BBVmc3TWp5YlM1UGtQWmpNSExUQmR0TkgKbFRQNkE2ZzArRnZ4bVJjUml0UTZUSG41V2g2bDQ3N0RWQzZhZnE5YTRyVGtxN0VqTkxYZ3huYWQzNUR3a0hjdApQRXQ1ZHMyckZreWlFaTgwYVZ2Q3ZLUllZbXRDbTdBeFJuRXJvY2c2SUNBSWpHV2x6MzVLVW4zbmZ5bU9WcTJSCkJLdE1CU1VDSm1GUGhpTUVpck1PZHNqcTdWZjNHZ2JzVnpuQVEvNUxhQ3hqQ2JHVVp3R29ZWDRTSTlHdDQ1My8KNzAvdWJrTmFqcElQK1hCQVJKMFJaK1B5anFmamZnbWZYc3JnUXc2amVJSkV6SVdQai8wcTM3VjM2TGRxNk40LwovYWNJZy80MGNhc2pCcGhrVzYwOEVyeUhuV1ZlQUhpcCs1N01TUC8zb1FLQmdRRGh2MzBTZ0NSNHZLdEdHMW52CmVMMXlSSE11M3BTWFBuK1kzOGpnYTJCMlZ0bDJNTjJuMDAyNFlWUnVMUnBqZTZic05WK0xid1kyME9DbDZQbFEKZ0hTZkcwdkM3RlVBanFaWEtOSWtCZWh2RVovQmFjMG56V0NSQWt0NHR4MGdvOEtuZ2dHQ1ZkNDNwb25MaURUawo5UkxMcEExTUFyMm1hRXhMdTU0MVhkUUtpUUtCZ1FEVWNqcUxTQnUzUnVucjhrVjNaVUhuYTRRUGtsY0I5NGplCkZHT3h6Y0NzNmhWMUE1alV3RGNtT0dvaWtsYU9QOVhVVnR0QzBmUGo5aFRrbUo2S3hla0thNHY5YmpkZlBDU3IKT3BhZEp2OTVMV2lmbE5lTUJPZXZFNnc1NlEzV0N6enhsS3RPdVRKNUlNN2VMcGxmUWN5NXBsdnRUQlZvSlQ1LwpEKzFmMFp6WEVRS0JnSG40TFFwZTQ5VzhFa25wb3pqb29tcm5vdGdTK0hPVEYvdXdCV2VEZkhYVHpPQzMzRHE5Cnh3TTB5eHBRRWk3bjh6TXlUeklWeFdTK2pISDNveVNra3Q0WU1HSGJzTDJCVlV4SVNPbWZxNHEvR2ZLMVNGd1YKOGZQSEtxSEpSZHFKd0RVaTM4L2N0eGlZU1dFSGNaUzIrUFcvNkZOR005T0NESjdxZXJ0WXU2VUpBb0dBRElkawpEbnpGTGF6ZjlNdEg3MytvUUZhbDVpa3lPbXAzeHVrYTdBeC9WWE5FcXE3NG4ydHFsVFYwaE85dWJWczBhQjVyCk5laWQ0bzdMc3FPUmpndVg3OFpoN2lORzNyWDBUNmpYNHhLK3RFM0tRc2NMWXpXUzJFOW5zODZidzBqTVlrN3IKUDJ4S25yd2hseGJXY3JpMXN5a3RlTFFvK3doZlJDMFRTYmhaOEpFQ2dZQkV2QlB3RTZidEk4UW1wU0MyT2NmbQpnZXJHYVFPREh4ak1tclNRTUxlM25iSlR1MlZOdXBrTFRydWFEK0g2ekhKSk5WV1NMWGdFcy9PZWFBUGk4STdSCm9aa3MwdDBEOTN2bHpRcGZWNjJLQWhIdUlqTW1wWnBteGFBdU5zdnQyUHJzUlpTdlZBNnBBK1A3dEdCUXdiZnQKSHlmMllOM0YrdXc3MlMzV20xb0lMQT09Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
-
----
-apiVersion: k8s.keycloak.org/v2alpha1
+# Keycloak upstream 26.6.4, reconciliado pelo Operator oficial da mesma versão.
+apiVersion: k8s.keycloak.org/v2beta1
 kind: Keycloak
 metadata:
   name: keycloak-ENV
@@ -21,59 +7,93 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  image: quay.io/thiagobotelho/rhbk-keycloak-custom:dev
+  image: quay.io/thiagobotelho/keycloak-custom:26.6.4
   instances: 1
-  update:
-    strategy: Auto
-  unsupported:
-    podTemplate:
-      spec:
-        containers:
-          - name: keycloak
-            imagePullPolicy: Always
-            env:
-              - name: KC_LOG_LEVEL
-                value: 'info'
-              - name: TZ
-                value: America/Sao_Paulo
-              - name: KC_METRICS_ENABLED
-                value: 'true'
-              - name: KC_TRACING_ENABLED
-                value: 'true'
-              - name: KC_FEATURES
-                value: opentelemetry
-              - name: KC_EVENT_METRICS_USER_ENABLED
-                value: 'true'
-              - name: KC_EVENT_METRICS_USER_EVENTS
-                value: 'login,logout,refresh_token'
-              - name: KC_EVENT_METRICS_USER_TAGS
-                value: 'realm,clientId,idp'
-              - name: KC_HTTP_METRICS_HISTOGRAMS_ENABLED
-                value: 'true'
-              - name: KC_CACHE_METRICS_HISTOGRAMS_ENABLED
-                value: 'true'
-              - name: KC_HTTP_METRICS_SLOS
-                value: '5,10,25,50,250,500,1000,2500,5000,10000'
-              - name: KC_TRACING_COMPRESSION
-                value: 'gzip'
-              - name: KC_TRACING_SAMPLER_TYPE
-                value: 'parentbased_traceidratio'
-              - name: KC_TRACING_SAMPLER_RATIO
-                value: "0.2"
-              - name: KC_TRACING_ENDPOINT
-                value: 'https://tempo-tempo-monolithic.openshift-tempo-operator.svc.cluster.local:4317'
+  startOptimized: true
+
+  # Recursos conservadores para CRC; produção exige sizing por carga.
+  resources:
+    requests:
+      cpu: 500m
+      memory: 768Mi
+    limits:
+      cpu: "2"
+      memory: 1536Mi
+
+  # HTTP fica restrito ao cluster; TLS termina no Route edge.
+  http:
+    httpEnabled: true
+    httpPort: 8080
+    serviceHttpPort: 8080
+  ingress:
+    enabled: false
+  hostname:
+    hostname: keycloak-ENV.apps-crc.testing
+    strict: true
+  proxy:
+    headers: xforwarded
+
   db:
     vendor: postgres
     host: postgres-db
+    database: keycloak
     usernameSecret:
       name: keycloak-db-secret
       key: username
     passwordSecret:
       name: keycloak-db-secret
       key: password
-  http:
-    tlsSecret: example-tls-secret
-  hostname:
-    hostname: keycloak-ENV.apps-crc.testing
-  proxy:
-    headers: xforwarded
+
+  # OTel compartilhado para traces; logs/métricas OTel permanecem opt-in.
+  telemetry:
+    endpoint: http://otel-collector-collector.observability.svc:4317
+    protocol: grpc
+    serviceName: keycloak-ENV
+    resourceAttributes:
+      deployment.environment.name: crc
+  tracing:
+    enabled: true
+    compression: gzip
+    samplerType: traceidratio
+    samplerRatio: 0.2
+
+  features:
+    enabled:
+      - opentelemetry
+      - user-event-metrics
+
+  # Tags limitadas ao realm evitam cardinalidade explosiva.
+  additionalOptions:
+    - name: metrics-enabled
+      value: "true"
+    - name: health-enabled
+      value: "true"
+    - name: event-metrics-user-enabled
+      value: "true"
+    - name: event-metrics-user-events
+      value: login,login_error,logout,refresh_token,code_to_token
+    - name: event-metrics-user-tags
+      value: realm
+    - name: http-metrics-histograms-enabled
+      value: "true"
+    - name: cache-metrics-histograms-enabled
+      value: "true"
+    - name: http-metrics-slos
+      value: 5,10,25,50,250,500,1000,2500,5000,10000
+    - name: http-access-log-enabled
+      value: "true"
+    - name: http-access-log-exclude
+      value: /health/.*|/metrics
+
+  serviceMonitor:
+    enabled: false
+
+  readinessProbe:
+    periodSeconds: 10
+    failureThreshold: 6
+  livenessProbe:
+    periodSeconds: 10
+    failureThreshold: 3
+  startupProbe:
+    periodSeconds: 5
+    failureThreshold: 60

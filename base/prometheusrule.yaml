@@ -1,0 +1,31 @@
+# Alertas mínimos de disponibilidade e erro para o laboratório Keycloak.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  groups:
+    - name: keycloak.availability
+      rules:
+        - alert: KeycloakTargetDown
+          expr: up{namespace="keycloak", job=~".*keycloak.*"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Prometheus não consegue coletar o Keycloak"
+            description: "O endpoint de gerenciamento está indisponível há 5 minutos."
+        - alert: KeycloakHighServerErrorRate
+          expr: |
+            (
+              sum(rate(http_server_requests_seconds_count{namespace="keycloak",status=~"5.."}[5m]))
+              /
+              clamp_min(sum(rate(http_server_requests_seconds_count{namespace="keycloak"}[5m])), 0.001)
+            ) > 0.01
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Taxa elevada de respostas 5xx no Keycloak"
+            description: "Mais de 1% das requisições resultaram em erro de servidor por 10 minutos."
