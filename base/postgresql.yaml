@@ -1,19 +1,4 @@
 apiVersion: v1
-kind: Secret
-metadata:
-  name: keycloak-db-secret
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
-  labels:
-    app: postgres
-type: Opaque
-stringData:
-  username: testuser
-  password: testpassword
-  database: keycloak
-
----
-apiVersion: v1
 kind: Service
 metadata:
   name: postgres-db
@@ -22,10 +7,10 @@ metadata:
 spec:
   selector:
     app: postgresql-db
-  type: LoadBalancer                    
+  type: ClusterIP
   ports:
-    - port: 5432                        
-      targetPort: 5432                
+    - port: 5432
+      targetPort: 5432
 
 ---
 apiVersion: apps/v1

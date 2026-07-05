@@ -30,13 +30,24 @@ keycloak-gitops/
 - **Tekton**: Responsável pelo build da imagem do Keycloak.
 - **Kustomize**: Usado para gerenciamento de configurações por ambiente (`dev`, `uat`, `prd`).
 - **PostgreSQL**: Banco de dados backend da instância Keycloak.
-- **Secrets TLS e banco**: Gerenciados via manifests GitOps.
+- **Secrets TLS e banco**: Criados externamente ou por um gerenciador de
+  segredos; valores sensíveis não são versionados.
 
 ## 🚀 Fluxo de Deploy
 
-1. O Argo CD monitora os diretórios `overlays/*`.
-2. Ao detectar uma alteração, aplica os recursos correspondentes.
-3. Cada ambiente possui seu namespace e configurações dedicadas.
+1. Crie `keycloak-db-secret` no namespace do overlay ou use External
+   Secrets/Sealed Secrets:
+
+   ```bash
+   oc -n keycloak-dev create secret generic keycloak-db-secret \
+     --from-literal=username=keycloak \
+     --from-literal=password='use-a-random-password' \
+     --from-literal=database=keycloak
+   ```
+
+2. O Argo CD monitora os diretórios `overlays/*`.
+3. Ao detectar uma alteração, aplica os recursos correspondentes.
+4. Cada ambiente possui seu namespace e configurações dedicadas.
 
 ## ✅ Pré-requisitos
 
