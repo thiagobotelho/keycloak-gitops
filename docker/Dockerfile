@@ -19,6 +19,7 @@ RUN touch -m --date=@1743465600 /opt/keycloak/providers/* && \
 ARG KEYCLOAK_VERSION=26.6.4
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
 
+ARG KEYCLOAK_VERSION
 LABEL org.opencontainers.image.title="Keycloak customizado" \
       org.opencontainers.image.version="${KEYCLOAK_VERSION}" \
       org.opencontainers.image.source="https://github.com/thiagobotelho/keycloak-gitops"

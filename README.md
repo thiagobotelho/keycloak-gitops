@@ -7,12 +7,27 @@ Os overlays `dev`, `uat` e `prd` isolam nomes, rotas e telemetria com Kustomize.
 > Este projeto usa o Keycloak comunitário e seu Operator oficial. Ele não é o
 > Red Hat Build of Keycloak (RHBK), que possui outro ciclo de suporte.
 
-## Arquitetura
+## 🏗️ Arquitetura
 
-```text
-cliente -> Route TLS (edge) -> Keycloak :8080 -> PostgreSQL 16
-                              | :9000 -> ServiceMonitor -> Prometheus
-                              + OTLP -> OpenTelemetry Collector -> Tempo
+```mermaid
+flowchart LR
+    A[Cliente] --> B[Route TLS edge]
+    B --> C[Keycloak 26.6.4]
+    C --> D[(PostgreSQL 16)]
+    C -->|Métricas :9000| E[ServiceMonitor]
+    E --> F[Prometheus]
+    C -->|Traces OTLP| G[OpenTelemetry Collector]
+    G --> H[Tempo]
+
+    subgraph cluster [Cluster OpenShift/Kubernetes]
+        B
+        C
+        D
+        E
+        F
+        G
+        H
+    end
 ```
 
 - Operator e CRDs oficiais fixados em `26.6.4`, evitando atualização implícita.
@@ -37,7 +52,7 @@ overlays/{dev,uat,prd} nomes e hosts de cada ambiente
 - OpenShift 4.x com `oc`, Kustomize e permissão `cluster-admin`;
 - User Workload Monitoring habilitado;
 - OpenTelemetry Collector e Tempo para receber traces;
-- imagem `quay.io/thiagobotelho/keycloak-custom:26.6.4` publicada.
+- imagem `quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4` publicada.
 
 O deploy funciona sem Tempo, mas o Collector registrará falhas de exportação.
 
@@ -48,7 +63,7 @@ O workflow publica a imagem no Quay em pushes para `main`. Para testar localment
 ```bash
 podman build \
   --build-arg KEYCLOAK_VERSION=26.6.4 \
-  -t quay.io/thiagobotelho/keycloak-custom:26.6.4 \
+  -t quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4 \
   -f docker/Dockerfile .
 ```
 
