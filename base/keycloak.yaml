@@ -71,7 +71,7 @@ spec:
     - name: event-metrics-user-enabled
       value: "true"
     - name: event-metrics-user-events
-      value: login,login_error,logout,refresh_token,code_to_token
+      value: login,logout,refresh_token,code_to_to
     - name: event-metrics-user-tags
       value: realm
     - name: http-metrics-histograms-enabled
