@@ -7,7 +7,9 @@ ENV KC_DB=postgres \
     KC_HEALTH_ENABLED=true \
     KC_METRICS_ENABLED=true \
     KC_TRACING_ENABLED=true \
-    KC_FEATURES=opentelemetry,user-event-metrics
+    KC_FEATURES=opentelemetry,user-event-metrics\
+    KC_EVENT_METRICS_USER_ENABLED=true \
+    KC_TRACING_SAMPLER_TYPE=traceidratio
 
 COPY --chown=keycloak:keycloak --chmod=644 themes/theme1.jar /opt/keycloak/providers/
 COPY --chown=keycloak:keycloak --chmod=644 themes/theme2.jar /opt/keycloak/providers/
