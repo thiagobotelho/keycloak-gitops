@@ -35,7 +35,7 @@ spec:
       containers:
         - name: postgresql-db
           # Imagem SCL preparada para o UID arbitrário aplicado pelo OpenShift.
-          image: quay.io/sclorg/postgresql-16-c9s:latest
+          image: quay.io/sclorg/postgresql-16-c9s@sha256:07015fc90d538887b2020bc7f36bfc7c2db326591ada3682f1227aac5b0466cd
           ports:
             - name: postgres
               containerPort: 5432

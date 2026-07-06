@@ -9,7 +9,10 @@ spec:
     - name: keycloak.availability
       rules:
         - alert: KeycloakTargetDown
-          expr: up{namespace="keycloak", job=~".*keycloak.*"} == 0
+          expr: |
+            absent(up{namespace=~"keycloak-(dev|uat|prd)", job=~".*keycloak.*"})
+            or
+            max(up{namespace=~"keycloak-(dev|uat|prd)", job=~".*keycloak.*"}) == 0
           for: 5m
           labels:
             severity: warning
@@ -19,9 +22,9 @@ spec:
         - alert: KeycloakHighServerErrorRate
           expr: |
             (
-              sum(rate(http_server_requests_seconds_count{namespace="keycloak",status=~"5.."}[5m]))
+              sum(rate(http_server_requests_seconds_count{namespace=~"keycloak-(dev|uat|prd)",status=~"5.."}[5m]))
               /
-              clamp_min(sum(rate(http_server_requests_seconds_count{namespace="keycloak"}[5m])), 0.001)
+              clamp_min(sum(rate(http_server_requests_seconds_count{namespace=~"keycloak-(dev|uat|prd)"}[5m])), 0.001)
             ) > 0.01
           for: 10m
           labels:
