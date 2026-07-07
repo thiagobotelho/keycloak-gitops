@@ -2,7 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: keycloak-observability-realm
-  namespace: keycloak
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
 data:
   observability-realm.json: |
     {
