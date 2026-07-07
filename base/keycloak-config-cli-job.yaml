@@ -21,20 +21,22 @@ spec:
           env:
             - name: KEYCLOAK_URL
               value: "https://keycloak-dev.apps-crc.testing"
-            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+            - name: KEYCLOAK_USER
               valueFrom:
                 secretKeyRef:
                   name: keycloak-dev-initial-admin
                   key: username
-            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+            - name: KEYCLOAK_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: keycloak-dev-initial-admin
                   key: password
+            - name: KEYCLOAK_SSLVERIFY
+              value: "false"
             - name: KEYCLOAK_AVAILABILITYCHECK_ENABLED
               value: "true"
             - name: KEYCLOAK_AVAILABILITYCHECK_TIMEOUT
-              value: "120s"
+              value: "300s"
             - name: IMPORT_FILES_LOCATIONS
               value: "/config/observability-realm.json"
             - name: IMPORT_CACHE_ENABLED
