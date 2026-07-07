@@ -11,6 +11,7 @@ configMapGenerator:
     literals:
       - ENV=keycloak-dev
       - KEYCLOAK_HOSTNAME=keycloak-dev.apps-crc.testing
+      - KEYCLOAK_URL=https://keycloak-dev.apps-crc.testing
       - SERVICE_NAME=keycloak-dev-service
 
 replacements:
@@ -45,6 +46,16 @@ replacements:
           name: keycloak
         fieldPaths:
           - spec.host
+  - source:
+      kind: ConfigMap
+      name: env-cfg
+      fieldPath: data.KEYCLOAK_URL
+    targets:
+      - select:
+          kind: Job
+          name: keycloak-config-cli-observability
+        fieldPaths:
+          - spec.template.spec.containers.[name=keycloak-config-cli].env.[name=KEYCLOAK_URL].value
   - source:
       kind: ConfigMap
       name: env-cfg
