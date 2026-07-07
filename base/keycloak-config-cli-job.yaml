@@ -60,6 +60,8 @@ spec:
               value: "false"
             - name: IMPORT_VARSUBSTITUTION_ENABLED
               value: "true"
+            - name: IMPORT_VARSUBSTITUTION_UNDEFINEDISERROR
+              value: "true"
             - name: IMPORT_BEHAVIORS_CHECKSUM_WITH_CACHE_KEY
               value: "false"
           volumeMounts:

@@ -131,7 +131,7 @@ data:
           "credentials": [
             {
               "type": "password",
-              "value": "${GRAFANA_ADMIN_PASSWORD}",
+              "value": "$(env:GRAFANA_ADMIN_PASSWORD)",
               "temporary": false
             }
           ]
@@ -149,7 +149,7 @@ data:
           "credentials": [
             {
               "type": "password",
-              "value": "${ZABBIX_ADMIN_PASSWORD}",
+              "value": "$(env:ZABBIX_ADMIN_PASSWORD)",
               "temporary": false
             }
           ]
@@ -168,7 +168,7 @@ data:
           "credentials": [
             {
               "type": "password",
-              "value": "${OBSERVABILITY_ADMIN_PASSWORD}",
+              "value": "$(env:OBSERVABILITY_ADMIN_PASSWORD)",
               "temporary": false
             }
           ]
