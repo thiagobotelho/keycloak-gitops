@@ -195,7 +195,7 @@ data:
           "webOrigins": [
             "https://grafana-grafana.apps-crc.testing"
           ],
-          attributes": {
+          "attributes": {
             "client.secret.creation.time": "0",
             "oauth2.device.authorization.grant.enabled": "false",
             "oidc.ciba.grant.enabled": "false",
