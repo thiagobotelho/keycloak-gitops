@@ -33,6 +33,21 @@ spec:
                 secretKeyRef:
                   name: keycloak-dev-initial-admin
                   key: password
+            - name: GRAFANA_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-observability-users
+                  key: GRAFANA_ADMIN_PASSWORD
+            - name: ZABBIX_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-observability-users
+                  key: ZABBIX_ADMIN_PASSWORD
+            - name: OBSERVABILITY_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-observability-users
+                  key: OBSERVABILITY_ADMIN_PASSWORD
             - name: KEYCLOAK_SSLVERIFY
               value: "false"
             - name: KEYCLOAK_AVAILABILITYCHECK_ENABLED

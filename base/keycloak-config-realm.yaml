@@ -117,6 +117,63 @@ data:
           ]
         }
       ],
+      "users": [
+        {
+          "username": "grafana-admin",
+          "enabled": true,
+          "emailVerified": true,
+          "firstName": "Grafana",
+          "lastName": "Admin",
+          "email": "grafana-admin@local.dev",
+          "groups": [
+            "/observability/grafana-grafana-admins"
+          ],
+          "credentials": [
+            {
+              "type": "password",
+              "value": "${GRAFANA_ADMIN_PASSWORD}",
+              "temporary": false
+            }
+          ]
+        },
+        {
+          "username": "zabbix-admin",
+          "enabled": true,
+          "emailVerified": true,
+          "firstName": "Zabbix",
+          "lastName": "Admin",
+          "email": "zabbix-admin@local.dev",
+          "groups": [
+            "/observability/zabbix-super-admins"
+          ],
+          "credentials": [
+            {
+              "type": "password",
+              "value": "${ZABBIX_ADMIN_PASSWORD}",
+              "temporary": false
+            }
+          ]
+        },
+        {
+          "username": "observability-admin",
+          "enabled": true,
+          "emailVerified": true,
+          "firstName": "Observability",
+          "lastName": "Admin",
+          "email": "observability-admin@local.dev",
+          "groups": [
+            "/observability/grafana-grafana-admins",
+            "/observability/zabbix-super-admins"
+          ],
+          "credentials": [
+            {
+              "type": "password",
+              "value": "${OBSERVABILITY_ADMIN_PASSWORD}",
+              "temporary": false
+            }
+          ]
+        }
+      ],
       "clients": [
         {
           "clientId": "grafana",
@@ -133,10 +190,10 @@ data:
           "authorizationServicesEnabled": false,
           "frontchannelLogout": true,
           "redirectUris": [
-            "https://grafana.apps-crc.testing/login/generic_oauth"
+            "https://grafana-grafana.apps-crc.testing/login/generic_oauth"
           ],
           "webOrigins": [
-            "https://grafana.apps-crc.testing"
+            "https://grafana-grafana.apps-crc.testing"
           ],
           "attributes": {
             "client.secret.creation.time": "0",
