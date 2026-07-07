@@ -20,7 +20,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: KEYCLOAK_URL
-              value: "http://keycloak-dev-service:8080"
+              value: "https://keycloak-dev.apps-crc.testing"
             - name: KEYCLOAK_USER
               valueFrom:
                 secretKeyRef:
