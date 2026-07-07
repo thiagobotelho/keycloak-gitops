@@ -12,3 +12,6 @@ resources:
   - route.yaml
   - servicemonitor.yaml
   - prometheusrule.yaml
+  - keycloak-admin-secret.yaml
+  - keycloak-config-realm.yaml
+  - keycloak-config-cli-job.yaml
