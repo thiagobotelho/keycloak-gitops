@@ -20,33 +20,51 @@ data:
       "roles": {
         "realm": [
           {
+            "name": "grafana_grafana_admin",
+            "description": "Grafana global server administrator"
+          },
+          {
             "name": "grafana_admin",
-            "description": "Grafana administrator role"
+            "description": "Grafana organization administrator"
           },
           {
             "name": "grafana_editor",
-            "description": "Grafana editor role"
+            "description": "Grafana editor"
           },
           {
             "name": "grafana_viewer",
-            "description": "Grafana viewer role"
+            "description": "Grafana viewer"
+          },
+          {
+            "name": "zabbix_super_admin",
+            "description": "Zabbix Super admin role"
           },
           {
             "name": "zabbix_admin",
-            "description": "Zabbix administrator role"
+            "description": "Zabbix Admin role"
           },
           {
             "name": "zabbix_user",
-            "description": "Zabbix standard user role"
+            "description": "Zabbix User role"
+          },
+          {
+            "name": "zabbix_guest",
+            "description": "Zabbix Guest role"
           }
         ]
       },
-
       "groups": [
         {
           "name": "observability",
           "path": "/observability",
           "subGroups": [
+            {
+              "name": "grafana-grafana-admins",
+              "path": "/observability/grafana-grafana-admins",
+              "realmRoles": [
+                "grafana_grafana_admin"
+              ]
+            },
             {
               "name": "grafana-admins",
               "path": "/observability/grafana-admins",
@@ -69,6 +87,13 @@ data:
               ]
             },
             {
+              "name": "zabbix-super-admins",
+              "path": "/observability/zabbix-super-admins",
+              "realmRoles": [
+                "zabbix_super_admin"
+              ]
+            },
+            {
               "name": "zabbix-admins",
               "path": "/observability/zabbix-admins",
               "realmRoles": [
@@ -81,11 +106,17 @@ data:
               "realmRoles": [
                 "zabbix_user"
               ]
+            },
+            {
+              "name": "zabbix-guests",
+              "path": "/observability/zabbix-guests",
+              "realmRoles": [
+                "zabbix_guest"
+              ]
             }
           ]
         }
       ],
-
       "clients": [
         {
           "clientId": "grafana",
