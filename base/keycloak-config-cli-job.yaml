@@ -21,16 +21,16 @@ spec:
           env:
             - name: KEYCLOAK_URL
               value: "https://keycloak-dev.apps-crc.testing"
-            - name: KEYCLOAK_USER
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: keycloak-admin-credentials
-                  key: KEYCLOAK_USER
-            - name: KEYCLOAK_PASSWORD
+                  name: keycloak-dev-initial-admin
+                  key: username
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: keycloak-admin-credentials
-                  key: KEYCLOAK_PASSWORD
+                  name: keycloak-dev-initial-admin
+                  key: password
             - name: KEYCLOAK_AVAILABILITYCHECK_ENABLED
               value: "true"
             - name: KEYCLOAK_AVAILABILITYCHECK_TIMEOUT
