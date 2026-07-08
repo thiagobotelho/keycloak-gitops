@@ -190,17 +190,17 @@ data:
           "authorizationServicesEnabled": false,
           "frontchannelLogout": true,
           "redirectUris": [
-            "https://grafana-grafana.apps-crc.testing/login/generic_oauth"
+            "$(env:GRAFANA_BASE_URL)/login/generic_oauth"
           ],
           "webOrigins": [
-            "https://grafana-grafana.apps-crc.testing"
+            "$(env:GRAFANA_BASE_URL)"
           ],
           "attributes": {
             "client.secret.creation.time": "0",
             "oauth2.device.authorization.grant.enabled": "false",
             "oidc.ciba.grant.enabled": "false",
             "pkce.code.challenge.method": "S256",
-            "post.logout.redirect.uris": "https://grafana-grafana.apps-crc.testing/*"
+            "post.logout.redirect.uris": "$(env:GRAFANA_BASE_URL)/*"
           },
           "defaultClientScopes": [
             "web-origins",
@@ -254,7 +254,7 @@ data:
           "protocol": "saml",
           "publicClient": false,
           "redirectUris": [
-            "https://zabbix-zabbix.apps-crc.testing/index_sso.php?acs"
+            "$(env:ZABBIX_BASE_URL)/index_sso.php?acs"
           ],
           "attributes": {
             "saml.assertion.signature": "true",
@@ -267,8 +267,8 @@ data:
             "saml.authnstatement": "true",
             "saml.onetimeuse.condition": "false",
             "saml_signature_canonicalization_method": "http://www.w3.org/2001/10/xml-exc-c14n#",
-            "saml_single_logout_service_url_post": "https://zabbix-zabbix.apps-crc.testing/index_sso.php?sls",
-            "saml_assertion_consumer_url_post": "https://zabbix-zabbix.apps-crc.testing/index_sso.php?acs"
+            "saml_single_logout_service_url_post": "$(env:ZABBIX_BASE_URL)/index_sso.php?sls",
+            "saml_assertion_consumer_url_post": "$(env:ZABBIX_BASE_URL)/index_sso.php?acs"
           },
           "protocolMappers": [
             {

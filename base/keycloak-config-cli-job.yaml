@@ -23,6 +23,10 @@ spec:
           env:
             - name: KEYCLOAK_URL
               value: "https://REPLACE_ME"
+            - name: GRAFANA_BASE_URL
+              value: "https://grafana.example.invalid"
+            - name: ZABBIX_BASE_URL
+              value: "https://zabbix.example.invalid"
             - name: KEYCLOAK_USER
               valueFrom:
                 secretKeyRef:

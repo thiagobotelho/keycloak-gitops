@@ -44,7 +44,9 @@ flowchart LR
 base/                 recursos comuns, Operator, banco e observabilidade
 docker/Dockerfile     build otimizado e extensível do Keycloak
 themes/               JARs opcionais de temas/providers (não versionados)
-overlays/{dev,uat,prd} nomes e hosts de cada ambiente
+overlays/{desenvolvimento,aceite,producao} nomes e hosts de cada ambiente
+overlays/{dev,uat,prd} aliases legados mantidos temporariamente
+docs/                documentação operacional por ambiente
 ```
 
 ## Pré-requisitos
@@ -75,8 +77,8 @@ normaliza timestamps e executa `kc.sh build`, como recomendado pelo Keycloak.
 Crie o segredo no namespace escolhido; nenhum segredo real deve entrar no Git:
 
 ```bash
-export ENVIRONMENT=dev
-export NAMESPACE=keycloak-${ENVIRONMENT}
+export ENVIRONMENT=desenvolvimento
+export NAMESPACE=keycloak-dev
 
 oc create namespace "${NAMESPACE}" --dry-run=client -o yaml | oc apply -f -
 oc -n "${NAMESPACE}" create secret generic keycloak-db-secret \
@@ -113,10 +115,10 @@ o app no Argo CD para recriar o Job de configuração do realm.
 
 ### Clients de autenticação
 
-- `grafana`: OpenID Connect confidential client para
-  `https://grafana-grafana.apps-crc.testing/login/generic_oauth`.
-- `zabbix`: SAML client para
-  `https://zabbix-zabbix.apps-crc.testing/index_sso.php?acs`.
+- `grafana`: OpenID Connect confidential client; URL base vem da variável
+  `GRAFANA_BASE_URL` injetada pelo overlay.
+- `zabbix`: SAML client; URL base vem da variável `ZABBIX_BASE_URL` injetada
+  pelo overlay.
 
 O client secret do Grafana fica no Keycloak e deve ser exportado para o Secret
 `grafana/grafana-oauth` pelo repositório `grafana-gitops`; ele não é versionado.
@@ -124,7 +126,7 @@ O client secret do Grafana fica no Keycloak e deve ser exportado para o Secret
 Confira a renderização antes da sincronização:
 
 ```bash
-oc kustomize overlays/dev >/tmp/keycloak-dev.yaml
+oc kustomize overlays/desenvolvimento >/tmp/keycloak-dev.yaml
 oc apply --dry-run=server -f /tmp/keycloak-dev.yaml
 ```
 
@@ -169,6 +171,26 @@ Atualize em conjunto a versão dos três manifests oficiais em
 Referências: [Keycloak Guides](https://www.keycloak.org/guides),
 [observabilidade](https://www.keycloak.org/observability/telemetry) e
 [containers](https://www.keycloak.org/server/containers).
+
+## Ambientes e validação
+
+```bash
+oc kustomize overlays/desenvolvimento >/tmp/keycloak-dev.yaml
+oc kustomize overlays/aceite >/tmp/keycloak-aceite.yaml
+oc kustomize overlays/producao >/tmp/keycloak-prod.yaml
+oc apply --dry-run=client -k overlays/desenvolvimento
+```
+
+`desenvolvimento` usa hosts CRC. `aceite` e `producao` usam placeholders
+`.example.invalid`; substitua no `configMapGenerator` antes do sync. Mais
+detalhes em `docs/AMBIENTES.md`.
+
+## Automatizações preservadas e ajustadas
+
+- Mantidos `.github/workflows/validate.yml` e `.github/workflows/build.yml`.
+- Mantido `scripts/bootstrap-observability-users.sh` para Secrets de usuários.
+- Ajustado realm para parametrizar `GRAFANA_BASE_URL` e `ZABBIX_BASE_URL`; não
+  há URL de Grafana/Zabbix fixa no JSON base.
 
 ## Licença
 

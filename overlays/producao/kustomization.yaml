@@ -4,17 +4,17 @@ kind: Kustomization
 resources:
   - ../../base
 
-namespace: keycloak-uat
+namespace: keycloak-prd
 
 configMapGenerator:
   - name: env-cfg
     literals:
-      - ENV=keycloak-uat
-      - KEYCLOAK_HOSTNAME=keycloak-aceite.apps.example.invalid
-      - KEYCLOAK_URL=https://keycloak-aceite.apps.example.invalid
-      - GRAFANA_BASE_URL=https://grafana-aceite.apps.example.invalid
-      - ZABBIX_BASE_URL=https://zabbix-aceite.apps.example.invalid
-      - SERVICE_NAME=keycloak-uat-service
+      - ENV=keycloak-prd
+      - KEYCLOAK_HOSTNAME=keycloak-producao.apps.example.invalid
+      - KEYCLOAK_URL=https://keycloak-producao.apps.example.invalid
+      - GRAFANA_BASE_URL=https://grafana-producao.apps.example.invalid
+      - ZABBIX_BASE_URL=https://zabbix-producao.apps.example.invalid
+      - SERVICE_NAME=keycloak-prd-service
 
 replacements:
   - source:
@@ -88,3 +88,13 @@ replacements:
           name: keycloak-config-cli-observability
         fieldPaths:
           - spec.template.spec.containers.[name=keycloak-config-cli].env.[name=ZABBIX_BASE_URL].value
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: keycloak
+      app.kubernetes.io/instance: keycloak-producao
+      app.kubernetes.io/component: identity
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/managed-by: argocd
+      app.kubernetes.io/environment: producao
+    includeSelectors: false

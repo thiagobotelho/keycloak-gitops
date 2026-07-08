@@ -4,17 +4,17 @@ kind: Kustomization
 resources:
   - ../../base
 
-namespace: keycloak-uat
+namespace: keycloak-dev
 
 configMapGenerator:
   - name: env-cfg
     literals:
-      - ENV=keycloak-uat
-      - KEYCLOAK_HOSTNAME=keycloak-aceite.apps.example.invalid
-      - KEYCLOAK_URL=https://keycloak-aceite.apps.example.invalid
-      - GRAFANA_BASE_URL=https://grafana-aceite.apps.example.invalid
-      - ZABBIX_BASE_URL=https://zabbix-aceite.apps.example.invalid
-      - SERVICE_NAME=keycloak-uat-service
+      - ENV=keycloak-dev
+      - KEYCLOAK_HOSTNAME=keycloak-dev.apps-crc.testing
+      - KEYCLOAK_URL=https://keycloak-dev.apps-crc.testing
+      - GRAFANA_BASE_URL=https://grafana-grafana.apps-crc.testing
+      - ZABBIX_BASE_URL=https://zabbix-zabbix.apps-crc.testing
+      - SERVICE_NAME=keycloak-dev-service
 
 replacements:
   - source:
@@ -41,23 +41,13 @@ replacements:
     targets:
       - select:
           kind: Keycloak
-        fieldPaths: [spec.hostname.hostname]
+        fieldPaths:
+          - spec.hostname.hostname
       - select:
           kind: Route
           name: keycloak
-        fieldPaths: [spec.host]
-  - source:
-      kind: ConfigMap
-      name: env-cfg
-      fieldPath: data.SERVICE_NAME
-    targets:
-      - select:
-          kind: Keycloak
-        fieldPaths: [spec.telemetry.serviceName]
-      - select:
-          kind: Route
-          name: keycloak
-        fieldPaths: [spec.to.name]
+        fieldPaths:
+          - spec.host
   - source:
       kind: ConfigMap
       name: env-cfg
@@ -88,3 +78,27 @@ replacements:
           name: keycloak-config-cli-observability
         fieldPaths:
           - spec.template.spec.containers.[name=keycloak-config-cli].env.[name=ZABBIX_BASE_URL].value
+  - source:
+      kind: ConfigMap
+      name: env-cfg
+      fieldPath: data.SERVICE_NAME
+    targets:
+      - select:
+          kind: Keycloak
+        fieldPaths:
+          - spec.telemetry.serviceName
+      - select:
+          kind: Route
+          name: keycloak
+        fieldPaths:
+          - spec.to.name
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: keycloak
+      app.kubernetes.io/instance: keycloak-desenvolvimento
+      app.kubernetes.io/component: identity
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/managed-by: argocd
+      app.kubernetes.io/environment: desenvolvimento
+    includeSelectors: false
