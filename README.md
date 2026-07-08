@@ -2,12 +2,13 @@
 
 Implantação declarativa do **Keycloak 26.6.4** em OpenShift, preparada para
 laboratórios locais com PostgreSQL, métricas, alertas e traces OpenTelemetry.
-Os overlays `dev`, `uat` e `prd` isolam nomes, rotas e telemetria com Kustomize.
+Os overlays `desenvolvimento`, `aceite` e `producao` isolam nomes, rotas e
+telemetria com Kustomize.
 
 > Este projeto usa o Keycloak comunitário e seu Operator oficial. Ele não é o
 > Red Hat Build of Keycloak (RHBK), que possui outro ciclo de suporte.
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 ```mermaid
 flowchart LR
@@ -45,7 +46,6 @@ base/                 recursos comuns, Operator, banco e observabilidade
 docker/Dockerfile     build otimizado e extensível do Keycloak
 themes/               JARs opcionais de temas/providers (não versionados)
 overlays/{desenvolvimento,aceite,producao} nomes e hosts de cada ambiente
-overlays/{dev,uat,prd} aliases legados mantidos temporariamente
 docs/                documentação operacional por ambiente
 ```
 
@@ -79,6 +79,7 @@ Crie o segredo no namespace escolhido; nenhum segredo real deve entrar no Git:
 ```bash
 export ENVIRONMENT=desenvolvimento
 export NAMESPACE=keycloak-dev
+export KEYCLOAK_NAME=keycloak-dev
 
 oc create namespace "${NAMESPACE}" --dry-run=client -o yaml | oc apply -f -
 oc -n "${NAMESPACE}" create secret generic keycloak-db-secret \
@@ -89,7 +90,7 @@ oc -n "${NAMESPACE}" create secret generic keycloak-db-secret \
 scripts/bootstrap-observability-users.sh
 
 oc apply -k "overlays/${ENVIRONMENT}"
-oc -n "${NAMESPACE}" wait --for=condition=Ready keycloak/keycloak-${ENVIRONMENT} --timeout=10m
+oc -n "${NAMESPACE}" wait --for=condition=Ready keycloak/${KEYCLOAK_NAME} --timeout=10m
 ```
 
 O Job `keycloak-config-cli-observability` cria o realm `observability`, grupos,
@@ -166,7 +167,8 @@ curl -fsS http://127.0.0.1:9000/metrics | head
 
 Atualize em conjunto a versão dos três manifests oficiais em
 `base/kustomization.yaml`, `KEYCLOAK_VERSION` no workflow/Dockerfile e a tag em
-`base/keycloak.yaml`. Renderize os três overlays e teste primeiro em `dev`.
+`base/keycloak.yaml`. Renderize os três overlays e teste primeiro em
+`desenvolvimento`.
 
 Referências: [Keycloak Guides](https://www.keycloak.org/guides),
 [observabilidade](https://www.keycloak.org/observability/telemetry) e
@@ -184,13 +186,6 @@ oc apply --dry-run=client -k overlays/desenvolvimento
 `desenvolvimento` usa hosts CRC. `aceite` e `producao` usam placeholders
 `.example.invalid`; substitua no `configMapGenerator` antes do sync. Mais
 detalhes em `docs/AMBIENTES.md`.
-
-## Automatizações preservadas e ajustadas
-
-- Mantidos `.github/workflows/validate.yml` e `.github/workflows/build.yml`.
-- Mantido `scripts/bootstrap-observability-users.sh` para Secrets de usuários.
-- Ajustado realm para parametrizar `GRAFANA_BASE_URL` e `ZABBIX_BASE_URL`; não
-  há URL de Grafana/Zabbix fixa no JSON base.
 
 ## Licença
 

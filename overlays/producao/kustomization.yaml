@@ -4,17 +4,17 @@ kind: Kustomization
 resources:
   - ../../base
 
-namespace: keycloak-prd
+namespace: keycloak-producao
 
 configMapGenerator:
   - name: env-cfg
     literals:
-      - ENV=keycloak-prd
+      - ENV=keycloak-producao
       - KEYCLOAK_HOSTNAME=keycloak-producao.apps.example.invalid
       - KEYCLOAK_URL=https://keycloak-producao.apps.example.invalid
       - GRAFANA_BASE_URL=https://grafana-producao.apps.example.invalid
       - ZABBIX_BASE_URL=https://zabbix-producao.apps.example.invalid
-      - SERVICE_NAME=keycloak-prd-service
+      - SERVICE_NAME=keycloak-producao-service
 
 replacements:
   - source:

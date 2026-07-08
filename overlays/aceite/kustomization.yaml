@@ -4,17 +4,17 @@ kind: Kustomization
 resources:
   - ../../base
 
-namespace: keycloak-uat
+namespace: keycloak-aceite
 
 configMapGenerator:
   - name: env-cfg
     literals:
-      - ENV=keycloak-uat
+      - ENV=keycloak-aceite
       - KEYCLOAK_HOSTNAME=keycloak-aceite.apps.example.invalid
       - KEYCLOAK_URL=https://keycloak-aceite.apps.example.invalid
       - GRAFANA_BASE_URL=https://grafana-aceite.apps.example.invalid
       - ZABBIX_BASE_URL=https://zabbix-aceite.apps.example.invalid
-      - SERVICE_NAME=keycloak-uat-service
+      - SERVICE_NAME=keycloak-aceite-service
 
 replacements:
   - source:

@@ -3,8 +3,8 @@
 Este repositório usa `base/` e `overlays/{desenvolvimento,aceite,producao}`.
 
 - `desenvolvimento`: namespace `keycloak-dev`, URLs CRC e recursos de laboratório.
-- `aceite`: namespace `keycloak-uat`, hosts `.example.invalid` como placeholder obrigatório.
-- `producao`: namespace `keycloak-prd`, hosts `.example.invalid` como placeholder obrigatório.
+- `aceite`: namespace `keycloak-aceite`, hosts `.example.invalid` como placeholder obrigatório.
+- `producao`: namespace `keycloak-producao`, hosts `.example.invalid` como placeholder obrigatório.
 
 Validação:
 
@@ -25,9 +25,3 @@ Parametrização:
 
 - `KEYCLOAK_URL`, `GRAFANA_BASE_URL` e `ZABBIX_BASE_URL` são injetados por overlay no `keycloak-config-cli`.
 - O realm usa `$(env:...)`; não há client secret ou senha real no Git.
-
-Automação preservada:
-
-- `.github/workflows/validate.yml`: renderiza Kustomizations e executa `yamllint`.
-- `.github/workflows/build.yml`: mantém build/push da imagem Keycloak customizada.
-- `scripts/bootstrap-observability-users.sh`: cria/atualiza Secret de usuários sem imprimir senhas.
