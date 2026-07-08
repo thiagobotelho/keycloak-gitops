@@ -84,10 +84,42 @@ oc -n "${NAMESPACE}" create secret generic keycloak-db-secret \
   --from-literal=password="$(openssl rand -base64 32)" \
   --from-literal=database=keycloak \
   --dry-run=client -o yaml | oc apply -f -
+scripts/bootstrap-observability-users.sh
 
 oc apply -k "overlays/${ENVIRONMENT}"
 oc -n "${NAMESPACE}" wait --for=condition=Ready keycloak/keycloak-${ENVIRONMENT} --timeout=10m
 ```
+
+O Job `keycloak-config-cli-observability` cria o realm `observability`, grupos,
+usuários e clients para Grafana e Zabbix. Ele consome o Secret
+`keycloak-observability-users` no namespace do Keycloak:
+
+| Chave | Uso |
+|---|---|
+| `GRAFANA_ADMIN_PASSWORD` | senha inicial do usuário `grafana-admin` |
+| `ZABBIX_ADMIN_PASSWORD` | senha inicial do usuário `zabbix-admin` |
+| `OBSERVABILITY_ADMIN_PASSWORD` | senha inicial do usuário `observability-admin` |
+
+Criação idempotente:
+
+```bash
+cp .env.example .env
+# opcional: preencha as senhas; se ficarem vazias, o script gera valores fortes.
+scripts/bootstrap-observability-users.sh
+```
+
+Rotação: altere as variáveis no `.env` e reexecute o script; depois sincronize
+o app no Argo CD para recriar o Job de configuração do realm.
+
+### Clients de autenticação
+
+- `grafana`: OpenID Connect confidential client para
+  `https://grafana-grafana.apps-crc.testing/login/generic_oauth`.
+- `zabbix`: SAML client para
+  `https://zabbix-zabbix.apps-crc.testing/index_sso.php?acs`.
+
+O client secret do Grafana fica no Keycloak e deve ser exportado para o Secret
+`grafana/grafana-oauth` pelo repositório `grafana-gitops`; ele não é versionado.
 
 Confira a renderização antes da sincronização:
 

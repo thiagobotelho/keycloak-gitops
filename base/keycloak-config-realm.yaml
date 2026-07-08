@@ -254,7 +254,7 @@ data:
           "protocol": "saml",
           "publicClient": false,
           "redirectUris": [
-            "https://zabbix.apps-crc.testing/index_sso.php?acs"
+            "https://zabbix-zabbix.apps-crc.testing/index_sso.php?acs"
           ],
           "attributes": {
             "saml.assertion.signature": "true",
@@ -267,8 +267,8 @@ data:
             "saml.authnstatement": "true",
             "saml.onetimeuse.condition": "false",
             "saml_signature_canonicalization_method": "http://www.w3.org/2001/10/xml-exc-c14n#",
-            "saml_single_logout_service_url_post": "https://zabbix.apps-crc.testing/index_sso.php?sls",
-            "saml_assertion_consumer_url_post": "https://zabbix.apps-crc.testing/index_sso.php?acs"
+            "saml_single_logout_service_url_post": "https://zabbix-zabbix.apps-crc.testing/index_sso.php?sls",
+            "saml_assertion_consumer_url_post": "https://zabbix-zabbix.apps-crc.testing/index_sso.php?acs"
           },
           "protocolMappers": [
             {
