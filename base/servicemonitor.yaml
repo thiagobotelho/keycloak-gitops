@@ -1,27 +1,3 @@
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: rhbk-service-monitor
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
-  labels:
-    monitoring.rhobs/stack: apps
-    app.kubernetes.io/name: keycloak
-    app.kubernetes.io/component: identity
-    app.kubernetes.io/part-of: observability
-spec:
-  scrapeProtocols:
-    - OpenMetricsText1.0.0
-  endpoints:
-    - interval: 30s
-      path: /metrics
-      port: management
-      scheme: http
-      scrapeTimeout: 10s
-  selector:
-    matchLabels:
-      app: keycloak
----      
 apiVersion: monitoring.rhobs/v1
 kind: ServiceMonitor
 metadata:
