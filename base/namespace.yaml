@@ -3,6 +3,7 @@ kind: Namespace
 metadata:
   name: keycloak-ENV
   labels:
+    observability: "enabled"
     openshift.io/user-monitoring: "true"
   annotations:
     argocd.argoproj.io/sync-wave: "0"
