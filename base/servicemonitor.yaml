@@ -21,3 +21,29 @@ spec:
   selector:
     matchLabels:
       app: keycloak
+---      
+apiVersion: monitoring.rhobs/v1
+kind: ServiceMonitor
+metadata:
+  name: rhbk-service-monitor
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  labels:
+    observability: platform
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: identity
+    app.kubernetes.io/part-of: observability
+spec:
+  scrapeProtocols:
+    - OpenMetricsText1.0.0
+    - OpenMetricsText0.0.1
+    - PrometheusText0.0.4
+  selector:
+    matchLabels:
+      app: keycloak
+  endpoints:
+    - interval: 30s
+      path: /metrics
+      port: management
+      scheme: http
+      scrapeTimeout: 10s
