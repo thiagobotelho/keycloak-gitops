@@ -24,18 +24,12 @@ spec:
       value: http://pyroscope.pyroscope.svc:4040
     - name: PYROSCOPE_FORMAT
       value: jfr
-    - name: PYROSCOPE_PROFILER_TYPE
-      value: JFR
     - name: PYROSCOPE_PROFILER_EVENT
-      value: cpu
+      value: itimer
     - name: PYROSCOPE_PROFILING_INTERVAL
       value: 10ms
     - name: PYROSCOPE_UPLOAD_INTERVAL
       value: 15s
-    - name: PYROSCOPE_PROFILER_LOCK
-      value: 10ms
-    - name: PYROSCOPE_PROFILER_ALLOC
-      value: 512k
     - name: PYROSCOPE_LABELS
       value: service_name=keycloak-ENV-service,service_namespace=keycloak-ENV,namespace=keycloak-ENV,deployment_environment_name=crc
 

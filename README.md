@@ -145,8 +145,9 @@ O endpoint OTLP padrão é
 OpenMetrics para preservar exemplares e o Grafana pode ligar uma amostra de
 latência ao trace correspondente no Tempo.
 
-O profiling contínuo usa o Pyroscope Java Agent em modo JFR, com baixo acoplamento
-ao container:
+O profiling contínuo usa o Pyroscope Java Agent em modo `javaagent`, com
+async-profiler in-process e saída JFR. No CRC o padrão fica CPU-only para evitar
+snapshots pesados:
 
 | Variável | Valor padrão | Uso |
 |---|---|---|
@@ -154,8 +155,7 @@ ao container:
 | `PYROSCOPE_SERVER_ADDRESS` | `http://pyroscope.pyroscope.svc:4040` | endpoint interno do Pyroscope |
 | `PYROSCOPE_APPLICATION_NAME` | definido por overlay | nome exibido no Profiles Drilldown |
 | `PYROSCOPE_FORMAT` | `jfr` | formato necessário para perfis Java ricos |
-| `PYROSCOPE_PROFILER_TYPE` | `JFR` | usa profiler nativo da JVM |
-| `PYROSCOPE_PROFILER_EVENT` | `cpu` | evita o default `itimer`, que pode falhar em JFR no CRC |
+| `PYROSCOPE_PROFILER_EVENT` | `itimer` | CPU profiling via async-profiler, estável em container Linux |
 | `PYROSCOPE_LABELS` | definido por overlay | labels `service_name`, `service_namespace`, `namespace` e ambiente |
 
 Esses labels precisam continuar alinhados ao datasource Tempo do
