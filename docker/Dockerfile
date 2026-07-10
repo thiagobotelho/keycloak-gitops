@@ -17,7 +17,7 @@ ENV KC_DB=postgres \
     KC_EVENT_METRICS_USER_ENABLED=true \
     KC_TRACING_SAMPLER_TYPE=traceidratio
 
-COPY --chown=keycloak:keycloak --chmod=644 themes/rhbk-theme-botelho-1.2.1.jar /opt/keycloak/providers/
+COPY --chown=keycloak:keycloak --chmod=644 themes/rhbk-theme-botelho-1.2.2.jar /opt/keycloak/providers/
 
 # Evita falso positivo de alteração do provider no start --optimized.
 RUN touch -m --date=@1743465600 /opt/keycloak/providers/* && \

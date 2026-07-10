@@ -57,7 +57,7 @@ docs/                documentação operacional por ambiente
 - OpenShift 4.x com `oc`, Kustomize e permissão `cluster-admin`;
 - Prometheus Apps, OpenTelemetry Collector, Tempo e Pyroscope implantados pela
   stack GitOps;
-- imagem `quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.1`
+- imagem `quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.2`
   publicada.
 
 O deploy funciona sem Tempo/Pyroscope, mas traces/profiles não aparecerão no
@@ -71,7 +71,7 @@ O workflow publica a imagem no Quay em pushes para `main`. Para testar localment
 podman build \
   --build-arg KEYCLOAK_VERSION=26.6.4 \
   --build-arg PYROSCOPE_JAVA_AGENT_VERSION=2.8.0 \
-  -t quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.1 \
+  -t quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.2 \
   -f docker/Dockerfile .
 ```
 
@@ -80,6 +80,13 @@ normaliza timestamps, executa `kc.sh build` e adiciona
 `/opt/keycloak/pyroscope.jar` para ativar profiling via `JAVA_OPTS_APPEND`.
 
 Tema Botelho Identity: [docs/TEMA-BOTELHO.md](docs/TEMA-BOTELHO.md).
+
+O tema mostra os recursos nativos que o realm habilitar. No realm
+`observability`, o GitOps já mantém `resetPasswordAllowed=true`,
+`rememberMe=true` e `loginWithEmailAllowed=true`. Para o fluxo real de
+“Esqueceu sua senha?” funcionar de ponta a ponta, configure SMTP no realm. Se a
+tela de login for do realm `master`, habilite os mesmos recursos no `master`,
+pois cada realm tem políticas próprias.
 
 ## Deploy
 
