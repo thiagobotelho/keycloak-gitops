@@ -155,6 +155,7 @@ ao container:
 | `PYROSCOPE_APPLICATION_NAME` | definido por overlay | nome exibido no Profiles Drilldown |
 | `PYROSCOPE_FORMAT` | `jfr` | formato necessário para perfis Java ricos |
 | `PYROSCOPE_PROFILER_TYPE` | `JFR` | usa profiler nativo da JVM |
+| `PYROSCOPE_PROFILER_EVENT` | `cpu` | evita o default `itimer`, que pode falhar em JFR no CRC |
 | `PYROSCOPE_LABELS` | definido por overlay | labels `service_name`, `service_namespace`, `namespace` e ambiente |
 
 Esses labels precisam continuar alinhados ao datasource Tempo do

@@ -26,6 +26,8 @@ spec:
       value: jfr
     - name: PYROSCOPE_PROFILER_TYPE
       value: JFR
+    - name: PYROSCOPE_PROFILER_EVENT
+      value: cpu
     - name: PYROSCOPE_PROFILING_INTERVAL
       value: 10ms
     - name: PYROSCOPE_UPLOAD_INTERVAL
