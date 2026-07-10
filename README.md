@@ -79,6 +79,8 @@ Providers e temas devem ser JARs em `themes/` antes do build. O Dockerfile
 normaliza timestamps, executa `kc.sh build` e adiciona
 `/opt/keycloak/pyroscope.jar` para ativar profiling via `JAVA_OPTS_APPEND`.
 
+Tema Botelho Identity: [docs/TEMA-BOTELHO.md](docs/TEMA-BOTELHO.md).
+
 ## Deploy
 
 Crie o segredo no namespace escolhido; nenhum segredo real deve entrar no Git:
