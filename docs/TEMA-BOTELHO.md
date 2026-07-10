@@ -3,12 +3,14 @@
 O `keycloak-gitops` consome o tema como artefato versionado:
 
 ```text
-docker/themes/rhbk-theme-botelho-1.2.0.jar
+docker/themes/rhbk-theme-botelho-1.2.1.jar
 ```
 
 O Dockerfile copia esse JAR para `/opt/keycloak/providers/` e executa
 `kc.sh build`, conforme o modelo de distribuição de temas por archive/JAR do
 Keycloak.
+
+Fonte do tema: <https://github.com/thiagobotelho/keycloak-theme-botelho>
 
 ## Recomendação de organização
 
@@ -25,7 +27,7 @@ Motivos:
 - o `keycloak-gitops` continua focado no deploy do Keycloak;
 - a imagem do Keycloak passa a consumir apenas artefatos versionados e
   publicados;
-- rollback fica claro: trocar `rhbk-theme-botelho-1.2.0.jar` por outra versão.
+- rollback fica claro: trocar `rhbk-theme-botelho-1.2.1.jar` por outra versão.
 
 Estrutura recomendada:
 
@@ -44,16 +46,16 @@ keycloak-theme-botelho/
 ## Fluxo recomendado
 
 1. Ajustar CSS/FTL/JS no repo do tema.
-2. Gerar versão nova, por exemplo `1.2.1`.
+2. Gerar versão nova, por exemplo `1.2.2`.
 3. Publicar release com:
-   - `rhbk-theme-botelho-1.2.1.jar`;
+   - `rhbk-theme-botelho-1.2.2.jar`;
    - checksum SHA256;
    - screenshots/preview.
 4. Atualizar `keycloak-gitops/docker/Dockerfile` para copiar o JAR novo.
 5. Atualizar tag da imagem customizada do Keycloak.
 6. Sincronizar `keycloak-dev` no Argo CD.
 
-## Pontos de melhoria observados no 1.2.0
+## Melhorias implementadas no 1.2.1
 
 - Refinar o espaçamento vertical entre logo, linha superior do card e título.
 - Ajustar a área inferior de controles para melhorar o seletor de tema em telas
