@@ -1,9 +1,16 @@
 # Alertas mínimos de disponibilidade e erro para o laboratório Keycloak.
-apiVersion: monitoring.coreos.com/v1
+apiVersion: monitoring.rhobs/v1
 kind: PrometheusRule
 metadata:
   name: keycloak
   namespace: keycloak
+  labels:
+    observability: platform
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: identity
+    app.kubernetes.io/part-of: observability
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   groups:
     - name: keycloak.availability
