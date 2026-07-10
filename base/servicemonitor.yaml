@@ -12,8 +12,6 @@ metadata:
 spec:
   scrapeProtocols:
     - OpenMetricsText1.0.0
-    - OpenMetricsText0.0.1
-    - PrometheusText0.0.4
   selector:
     matchLabels:
       app: keycloak
