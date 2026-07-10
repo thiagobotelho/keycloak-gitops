@@ -7,9 +7,35 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  image: quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4
+  image: quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0
   instances: 1
   startOptimized: true
+
+  # Continuous profiling para o Grafana Profiles Drilldown.
+  # A imagem customizada carrega /opt/keycloak/pyroscope.jar.
+  env:
+    - name: JAVA_OPTS_APPEND
+      value: "-javaagent:/opt/keycloak/pyroscope.jar"
+    - name: PYROSCOPE_AGENT_ENABLED
+      value: "true"
+    - name: PYROSCOPE_APPLICATION_NAME
+      value: keycloak-ENV-service
+    - name: PYROSCOPE_SERVER_ADDRESS
+      value: http://pyroscope.pyroscope.svc:4040
+    - name: PYROSCOPE_FORMAT
+      value: jfr
+    - name: PYROSCOPE_PROFILER_TYPE
+      value: JFR
+    - name: PYROSCOPE_PROFILING_INTERVAL
+      value: 10ms
+    - name: PYROSCOPE_UPLOAD_INTERVAL
+      value: 15s
+    - name: PYROSCOPE_PROFILER_LOCK
+      value: 10ms
+    - name: PYROSCOPE_PROFILER_ALLOC
+      value: 512k
+    - name: PYROSCOPE_LABELS
+      value: service_name=keycloak-ENV-service,service_namespace=keycloak-ENV,namespace=keycloak-ENV,deployment_environment_name=crc
 
   # Recursos conservadores para CRC; produção exige sizing por carga.
   resources:

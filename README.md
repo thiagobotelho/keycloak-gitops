@@ -1,9 +1,9 @@
 # Keycloak GitOps
 
 Implantação declarativa do **Keycloak 26.6.4** em OpenShift, preparada para
-laboratórios locais com PostgreSQL, métricas, alertas e traces OpenTelemetry.
-Os overlays `desenvolvimento`, `aceite` e `producao` isolam nomes, rotas e
-telemetria com Kustomize.
+laboratórios locais com PostgreSQL, métricas, alertas, traces OpenTelemetry e
+profiles no Pyroscope. Os overlays `desenvolvimento`, `aceite` e `producao`
+isolam nomes, rotas e telemetria com Kustomize.
 
 > Este projeto usa o Keycloak comunitário e seu Operator oficial. Ele não é o
 > Red Hat Build of Keycloak (RHBK), que possui outro ciclo de suporte.
@@ -19,6 +19,7 @@ flowchart LR
     E --> F[Prometheus]
     C -->|Traces OTLP| G[OpenTelemetry Collector]
     G --> H[Tempo]
+    C -->|Profiles Java/JFR| I[Pyroscope]
 
     subgraph cluster [Cluster OpenShift/Kubernetes]
         B
@@ -28,6 +29,7 @@ flowchart LR
         F
         G
         H
+        I
     end
 ```
 
@@ -36,6 +38,7 @@ flowchart LR
 - métricas de eventos limitadas por realm para controlar cardinalidade;
 - histogramas e exemplares OpenMetrics habilitados;
 - amostragem de traces em 20% com `traceidratio`;
+- profiles Java/JFR enviados ao Pyroscope para o Grafana Profiles Drilldown;
 - imagem otimizada pelo `kc.sh build`, criada pelo GitHub Actions;
 - recursos dimensionados para OpenShift Local, sem promessa de alta disponibilidade.
 
@@ -52,11 +55,13 @@ docs/                documentação operacional por ambiente
 ## Pré-requisitos
 
 - OpenShift 4.x com `oc`, Kustomize e permissão `cluster-admin`;
-- User Workload Monitoring habilitado;
-- OpenTelemetry Collector e Tempo para receber traces;
-- imagem `quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4` publicada.
+- Prometheus Apps, OpenTelemetry Collector, Tempo e Pyroscope implantados pela
+  stack GitOps;
+- imagem `quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0`
+  publicada.
 
-O deploy funciona sem Tempo, mas o Collector registrará falhas de exportação.
+O deploy funciona sem Tempo/Pyroscope, mas traces/profiles não aparecerão no
+Grafana enquanto os backends não estiverem disponíveis.
 
 ## Build da imagem
 
@@ -65,12 +70,14 @@ O workflow publica a imagem no Quay em pushes para `main`. Para testar localment
 ```bash
 podman build \
   --build-arg KEYCLOAK_VERSION=26.6.4 \
-  -t quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4 \
+  --build-arg PYROSCOPE_JAVA_AGENT_VERSION=2.8.0 \
+  -t quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0 \
   -f docker/Dockerfile .
 ```
 
 Providers e temas devem ser JARs em `themes/` antes do build. O Dockerfile
-normaliza timestamps e executa `kc.sh build`, como recomendado pelo Keycloak.
+normaliza timestamps, executa `kc.sh build` e adiciona
+`/opt/keycloak/pyroscope.jar` para ativar profiling via `JAVA_OPTS_APPEND`.
 
 ## Deploy
 
@@ -138,6 +145,22 @@ O endpoint OTLP padrão é
 OpenMetrics para preservar exemplares e o Grafana pode ligar uma amostra de
 latência ao trace correspondente no Tempo.
 
+O profiling contínuo usa o Pyroscope Java Agent em modo JFR, com baixo acoplamento
+ao container:
+
+| Variável | Valor padrão | Uso |
+|---|---|---|
+| `JAVA_OPTS_APPEND` | `-javaagent:/opt/keycloak/pyroscope.jar` | carrega o agente Java |
+| `PYROSCOPE_SERVER_ADDRESS` | `http://pyroscope.pyroscope.svc:4040` | endpoint interno do Pyroscope |
+| `PYROSCOPE_APPLICATION_NAME` | definido por overlay | nome exibido no Profiles Drilldown |
+| `PYROSCOPE_FORMAT` | `jfr` | formato necessário para perfis Java ricos |
+| `PYROSCOPE_PROFILER_TYPE` | `JFR` | usa profiler nativo da JVM |
+| `PYROSCOPE_LABELS` | definido por overlay | labels `service_name`, `service_namespace`, `namespace` e ambiente |
+
+Esses labels precisam continuar alinhados ao datasource Tempo do
+`grafana-gitops`, que mapeia `service.name` para `service_name` ao abrir
+profiles a partir de um trace.
+
 As métricas de eventos ficam restritas a login, logout, registro e erros. Não
 adicione `clientId` ou `idp` indiscriminadamente: esses rótulos podem elevar
 muito a cardinalidade. Os dashboards oficiais de capacidade e troubleshooting
@@ -150,6 +173,7 @@ oc -n "${NAMESPACE}" get keycloak,pods,route,servicemonitor,prometheusrule
 oc -n "${NAMESPACE}" port-forward svc/keycloak-${ENVIRONMENT}-service 9000:9000
 curl -fsS http://127.0.0.1:9000/health/ready
 curl -fsS http://127.0.0.1:9000/metrics | head
+oc -n "${NAMESPACE}" exec "${KEYCLOAK_NAME}-0" -- printenv PYROSCOPE_APPLICATION_NAME
 ```
 
 ## Segurança e produção
@@ -165,14 +189,16 @@ curl -fsS http://127.0.0.1:9000/metrics | head
 
 ## Atualização
 
-Atualize em conjunto a versão dos três manifests oficiais em
-`base/kustomization.yaml`, `KEYCLOAK_VERSION` no workflow/Dockerfile e a tag em
-`base/keycloak.yaml`. Renderize os três overlays e teste primeiro em
+Atualize em conjunto a versão dos manifests oficiais em `base/kustomization.yaml`,
+`KEYCLOAK_VERSION`/`PYROSCOPE_JAVA_AGENT_VERSION` no workflow/Dockerfile e a tag
+em `base/keycloak.yaml`. Renderize os três overlays e teste primeiro em
 `desenvolvimento`.
 
 Referências: [Keycloak Guides](https://www.keycloak.org/guides),
 [observabilidade](https://www.keycloak.org/observability/telemetry) e
-[containers](https://www.keycloak.org/server/containers).
+[containers](https://www.keycloak.org/server/containers). Para profiling,
+consulte a documentação do
+[Pyroscope Java Agent](https://grafana.com/docs/pyroscope/latest/configure-client/language-sdks/java/).
 
 ## Ambientes e validação
 

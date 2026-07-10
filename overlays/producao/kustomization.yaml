@@ -15,6 +15,7 @@ configMapGenerator:
       - GRAFANA_BASE_URL=https://grafana-producao.apps.example.invalid
       - ZABBIX_BASE_URL=https://zabbix-producao.apps.example.invalid
       - SERVICE_NAME=keycloak-producao-service
+      - PYROSCOPE_LABELS=service_name=keycloak-producao-service,service_namespace=keycloak-producao,namespace=keycloak-producao,deployment_environment_name=producao
 
 replacements:
   - source:
@@ -53,11 +54,22 @@ replacements:
     targets:
       - select:
           kind: Keycloak
-        fieldPaths: [spec.telemetry.serviceName]
+        fieldPaths:
+          - spec.telemetry.serviceName
+          - spec.env.[name=PYROSCOPE_APPLICATION_NAME].value
       - select:
           kind: Route
           name: keycloak
         fieldPaths: [spec.to.name]
+  - source:
+      kind: ConfigMap
+      name: env-cfg
+      fieldPath: data.PYROSCOPE_LABELS
+    targets:
+      - select:
+          kind: Keycloak
+        fieldPaths:
+          - spec.env.[name=PYROSCOPE_LABELS].value
   - source:
       kind: ConfigMap
       name: env-cfg

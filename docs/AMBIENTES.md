@@ -24,4 +24,10 @@ Secrets obrigatórios:
 Parametrização:
 
 - `KEYCLOAK_URL`, `GRAFANA_BASE_URL` e `ZABBIX_BASE_URL` são injetados por overlay no `keycloak-config-cli`.
+- `PYROSCOPE_APPLICATION_NAME` recebe o mesmo valor de `SERVICE_NAME`, mantendo o nome do serviço igual em traces e profiles.
+- `PYROSCOPE_LABELS` é definido por overlay com `service_name`, `service_namespace`, `namespace` e `deployment_environment_name`.
 - O realm usa `$(env:...)`; não há client secret ou senha real no Git.
+
+O datasource Tempo do `grafana-gitops` usa esses labels para abrir profiles do
+Keycloak a partir de um span. Se renomear namespace, serviço ou ambiente,
+atualize também `SERVICE_NAME` e `PYROSCOPE_LABELS`.
