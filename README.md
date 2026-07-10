@@ -57,7 +57,7 @@ docs/                documentação operacional por ambiente
 - OpenShift 4.x com `oc`, Kustomize e permissão `cluster-admin`;
 - Prometheus Apps, OpenTelemetry Collector, Tempo e Pyroscope implantados pela
   stack GitOps;
-- imagem `quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.2`
+- imagem `quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.3`
   publicada.
 
 O deploy funciona sem Tempo/Pyroscope, mas traces/profiles não aparecerão no
@@ -71,7 +71,7 @@ O workflow publica a imagem no Quay em pushes para `main`. Para testar localment
 podman build \
   --build-arg KEYCLOAK_VERSION=26.6.4 \
   --build-arg PYROSCOPE_JAVA_AGENT_VERSION=2.8.0 \
-  -t quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.2 \
+  -t quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.3 \
   -f docker/Dockerfile .
 ```
 
