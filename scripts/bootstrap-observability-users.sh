@@ -34,7 +34,7 @@ require "${OC_BIN}"
 require openssl
 require base64
 
-"${OC_BIN}" create namespace "${NAMESPACE}" --dry-run=client -o yaml | "${OC_BIN}" apply -f - >/dev/null
+"${OC_BIN}" create namespace "${NAMESPACE}" --dry-run=client -o yaml | "${OC_BIN}" apply --server-side -f - >/dev/null
 
 GRAFANA_ADMIN_PASSWORD="${GRAFANA_ADMIN_PASSWORD:-$(existing_key GRAFANA_ADMIN_PASSWORD)}"
 ZABBIX_ADMIN_PASSWORD="${ZABBIX_ADMIN_PASSWORD:-$(existing_key ZABBIX_ADMIN_PASSWORD)}"
@@ -48,7 +48,9 @@ OBSERVABILITY_ADMIN_PASSWORD="${OBSERVABILITY_ADMIN_PASSWORD:-$(generate_passwor
   --from-literal=GRAFANA_ADMIN_PASSWORD="${GRAFANA_ADMIN_PASSWORD}" \
   --from-literal=ZABBIX_ADMIN_PASSWORD="${ZABBIX_ADMIN_PASSWORD}" \
   --from-literal=OBSERVABILITY_ADMIN_PASSWORD="${OBSERVABILITY_ADMIN_PASSWORD}" \
-  --dry-run=client -o yaml | "${OC_BIN}" apply -f - >/dev/null
+  --dry-run=client -o yaml | "${OC_BIN}" apply --server-side -f - >/dev/null
+"${OC_BIN}" -n "${NAMESPACE}" annotate secret "${SECRET_NAME}" \
+  kubectl.kubernetes.io/last-applied-configuration- >/dev/null 2>&1 || true
 
 echo "[OK] Secret ${NAMESPACE}/${SECRET_NAME} reconciliado."
 echo "[INFO] Valores sensíveis não foram exibidos. Reexecute para manter os valores existentes ou defina variáveis para rotacionar."

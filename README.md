@@ -97,12 +97,12 @@ export ENVIRONMENT=desenvolvimento
 export NAMESPACE=keycloak-dev
 export KEYCLOAK_NAME=keycloak-dev
 
-oc create namespace "${NAMESPACE}" --dry-run=client -o yaml | oc apply -f -
+oc create namespace "${NAMESPACE}" --dry-run=client -o yaml | oc apply --server-side -f -
 oc -n "${NAMESPACE}" create secret generic keycloak-db-secret \
   --from-literal=username=keycloak \
   --from-literal=password="$(openssl rand -base64 32)" \
   --from-literal=database=keycloak \
-  --dry-run=client -o yaml | oc apply -f -
+  --dry-run=client -o yaml | oc apply --server-side -f -
 scripts/bootstrap-observability-users.sh
 
 oc apply -k "overlays/${ENVIRONMENT}"
