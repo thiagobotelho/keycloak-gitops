@@ -29,7 +29,7 @@ jobs:
       ORG: ${{ secrets.QUAY_ORG || 'thiagobotelho' }}
       # Mantém o destino Quay existente, no qual o robot account possui escrita.
       IMAGE_NAME: rhbk-keycloak-custom
-      IMAGE_VERSION: 26.6.4-pyroscope-2.8.0-theme-1.2.3
+      IMAGE_VERSION: 26.6.4-pyroscope-2.8.0-theme-1.2.4
       PYROSCOPE_JAVA_AGENT_VERSION: 2.8.0
       CONTEXT_DIR: docker
       # Prioridade: input manual > tag Git > branch > dev

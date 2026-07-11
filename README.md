@@ -57,7 +57,7 @@ docs/                documentação operacional por ambiente
 - OpenShift 4.x com `oc`, Kustomize e permissão `cluster-admin`;
 - Prometheus Apps, OpenTelemetry Collector, Tempo e Pyroscope implantados pela
   stack GitOps;
-- imagem `quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.3`
+- imagem `quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.4`
   publicada.
 
 O deploy funciona sem Tempo/Pyroscope, mas traces/profiles não aparecerão no
@@ -71,7 +71,7 @@ O workflow publica a imagem no Quay em pushes para `main`. Para testar localment
 podman build \
   --build-arg KEYCLOAK_VERSION=26.6.4 \
   --build-arg PYROSCOPE_JAVA_AGENT_VERSION=2.8.0 \
-  -t quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.3 \
+  -t quay.io/thiagobotelho/rhbk-keycloak-custom:26.6.4-pyroscope-2.8.0-theme-1.2.4 \
   -f docker/Dockerfile .
 ```
 
@@ -135,7 +135,9 @@ o app no Argo CD para recriar o Job de configuração do realm.
 - `grafana`: OpenID Connect confidential client; URL base vem da variável
   `GRAFANA_BASE_URL` injetada pelo overlay.
 - `zabbix`: SAML client; URL base vem da variável `ZABBIX_BASE_URL` injetada
-  pelo overlay.
+  pelo overlay. O mapper SAML de grupos emite nomes sem caminho completo
+  (`zabbix-admins`, `zabbix-users`, etc.) para alinhar com o JIT/SCIM do
+  Zabbix.
 
 O client secret do Grafana fica no Keycloak e deve ser exportado para o Secret
 `grafana/grafana-oauth` pelo repositório `grafana-gitops`; ele não é versionado.
@@ -155,8 +157,9 @@ OpenMetrics para preservar exemplares e o Grafana pode ligar uma amostra de
 latência ao trace correspondente no Tempo.
 
 O profiling contínuo usa o Pyroscope Java Agent em modo `javaagent`, com
-async-profiler in-process e saída JFR. No CRC o padrão fica CPU-only para evitar
-snapshots pesados:
+async-profiler in-process e saída JFR. No CRC o padrão usa wall-clock profiling
+e ativa alloc/lock com thresholds conservadores para ampliar o Profiles
+Drilldown sem coletar cada evento:
 
 | Variável | Valor padrão | Uso |
 |---|---|---|
@@ -164,7 +167,9 @@ snapshots pesados:
 | `PYROSCOPE_SERVER_ADDRESS` | `http://pyroscope.pyroscope.svc:4040` | endpoint interno do Pyroscope |
 | `PYROSCOPE_APPLICATION_NAME` | definido por overlay | nome exibido no Profiles Drilldown |
 | `PYROSCOPE_FORMAT` | `jfr` | formato necessário para perfis Java ricos |
-| `PYROSCOPE_PROFILER_EVENT` | `itimer` | CPU profiling via async-profiler, estável em container Linux |
+| `PYROSCOPE_PROFILER_EVENT` | `wall` | wall-clock profiling; em Java/JFR também gera visão CPU |
+| `PYROSCOPE_PROFILER_ALLOC` | `512k` | amostra alocações acima do threshold |
+| `PYROSCOPE_PROFILER_LOCK` | `10ms` | amostra contenção de locks acima do threshold |
 | `PYROSCOPE_LABELS` | definido por overlay | labels `service_name`, `service_namespace`, `namespace` e ambiente |
 
 Esses labels precisam continuar alinhados ao datasource Tempo do

@@ -3,7 +3,7 @@
 O `keycloak-gitops` consome o tema como artefato versionado:
 
 ```text
-docker/themes/rhbk-theme-botelho-1.2.3.jar
+docker/themes/rhbk-theme-botelho-1.2.4.jar
 ```
 
 O Dockerfile copia esse JAR para `/opt/keycloak/providers/` e executa
@@ -27,7 +27,7 @@ Motivos:
 - o `keycloak-gitops` continua focado no deploy do Keycloak;
 - a imagem do Keycloak passa a consumir apenas artefatos versionados e
   publicados;
-- rollback fica claro: trocar `rhbk-theme-botelho-1.2.3.jar` por outra versão.
+- rollback fica claro: trocar `rhbk-theme-botelho-1.2.4.jar` por outra versão.
 
 Estrutura recomendada:
 
@@ -46,19 +46,19 @@ keycloak-theme-botelho/
 ## Fluxo recomendado
 
 1. Ajustar CSS/FTL/JS no repo do tema.
-2. Gerar versão nova, por exemplo `1.2.3`.
+2. Gerar versão nova, por exemplo `1.2.4`.
 3. Publicar release com:
-   - `rhbk-theme-botelho-1.2.3.jar`;
+   - `rhbk-theme-botelho-1.2.4.jar`;
    - checksum SHA256;
    - screenshots/preview.
 4. Atualizar `keycloak-gitops/docker/Dockerfile` para copiar o JAR novo.
 5. Atualizar tag da imagem customizada do Keycloak.
 6. Sincronizar `keycloak-dev` no Argo CD.
 
-## Melhorias implementadas no 1.2.3
+## Melhorias implementadas no 1.2.4
 
-- Remove de forma explícita a faixa azul nativa do PatternFly/Keycloak no topo
-  do cartão de login.
+- Remove a borda/faixa superior remanescente do cartão de login.
+- Renomeia assets CSS/JS para reduzir cache visual antigo após rollout.
 - Melhora a apresentação das ações nativas do Keycloak: recuperação de senha,
   cadastro quando habilitado, lembrar de mim e provedores de identidade.
 - Documenta que recursos como “Esqueceu sua senha?” dependem de configuração do

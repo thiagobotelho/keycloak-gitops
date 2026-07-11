@@ -328,7 +328,7 @@ data:
                 "attribute.name": "groups",
                 "attribute.nameformat": "Basic",
                 "single": "false",
-                "full.path": "true"
+                "full.path": "false"
               }
             }
           ]
