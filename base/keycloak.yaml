@@ -99,7 +99,9 @@ spec:
     - name: event-metrics-user-events
       value: login,logout,refresh_token
     - name: event-metrics-user-tags
-      value: realm
+      # clientId habilita o detalhamento de falhas por aplicação no Zabbix.
+      # O conjunto de eventos permanece limitado para controlar cardinalidade.
+      value: realm,clientId
     - name: http-metrics-histograms-enabled
       value: "true"
     - name: cache-metrics-histograms-enabled
