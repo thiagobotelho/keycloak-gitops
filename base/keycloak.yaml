@@ -111,6 +111,9 @@ spec:
     - name: http-access-log-exclude
       value: /health/.*|/metrics
 
+  # O COO usa a API monitoring.rhobs/v1, portanto o ServiceMonitor é
+  # mantido separadamente em servicemonitor.yaml. Habilitar este campo criaria
+  # um segundo monitor monitoring.coreos.com e duplicaria o scrape.
   serviceMonitor:
     enabled: false
 
