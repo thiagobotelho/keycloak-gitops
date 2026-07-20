@@ -35,6 +35,11 @@ replacements:
           kind: Keycloak
         fieldPaths:
           - metadata.name
+      - select:
+          kind: ServiceMonitor
+          name: rhbk-service-monitor
+        fieldPaths:
+          - spec.selector.matchLabels.app\.kubernetes\.io/instance
   - source:
       kind: ConfigMap
       name: env-cfg
