@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - keycloak-issuer-ca.yaml
 
 namespace: keycloak-dev
 
@@ -40,6 +41,11 @@ replacements:
           name: rhbk-service-monitor
         fieldPaths:
           - spec.selector.matchLabels.app\.kubernetes\.io/instance
+      - select:
+          kind: ClusterRoleBinding
+          name: keycloak-operator-clusterrole-binding
+        fieldPaths:
+          - subjects.0.namespace
   - source:
       kind: ConfigMap
       name: env-cfg
@@ -118,3 +124,6 @@ labels:
       app.kubernetes.io/managed-by: argocd
       app.kubernetes.io/environment: desenvolvimento
     includeSelectors: false
+
+patches:
+  - path: keycloak-import-tls.yaml

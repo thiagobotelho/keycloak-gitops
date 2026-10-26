@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: keycloak-config-cli-observability
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: trust-keycloak-ca
+        image: docker.io/adorsys/keycloak-config-cli@sha256:0955d98c8a341898b7aa177477edf8a1e90569ae50bbe7598141c1270b773274
+        command:
+        - keytool
+        args:
+        - -importcert
+        - -noprompt
+        - -alias
+        - crc-ingress
+        - -file
+        - /ca/ca.crt
+        - -keystore
+        - /trust/truststore.p12
+        - -storetype
+        - PKCS12
+        - -storepass
+        - changeit
+        volumeMounts:
+        - name: keycloak-ca
+          mountPath: /ca
+          readOnly: true
+        - name: keycloak-trust
+          mountPath: /trust
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+      containers:
+      - name: keycloak-config-cli
+        image: docker.io/adorsys/keycloak-config-cli@sha256:0955d98c8a341898b7aa177477edf8a1e90569ae50bbe7598141c1270b773274
+        env:
+        - name: KEYCLOAK_SSLVERIFY
+          value: 'true'
+        - name: JAVA_TOOL_OPTIONS
+          value: -Djavax.net.ssl.trustStore=/trust/truststore.p12 -Djavax.net.ssl.trustStorePassword=changeit
+        volumeMounts:
+        - name: keycloak-trust
+          mountPath: /trust
+          readOnly: true
+      volumes:
+      - name: keycloak-ca
+        configMap:
+          name: keycloak-issuer-ca
+      - name: keycloak-trust
+        emptyDir: {}
