@@ -127,13 +127,6 @@ data:
           "email": "grafana-admin@local.dev",
           "groups": [
             "/observability/grafana-grafana-admins"
-          ],
-          "credentials": [
-            {
-              "type": "password",
-              "value": "$(env:GRAFANA_ADMIN_PASSWORD)",
-              "temporary": false
-            }
           ]
         },
         {
@@ -145,13 +138,6 @@ data:
           "email": "zabbix-admin@local.dev",
           "groups": [
             "/observability/zabbix-super-admins"
-          ],
-          "credentials": [
-            {
-              "type": "password",
-              "value": "$(env:ZABBIX_ADMIN_PASSWORD)",
-              "temporary": false
-            }
           ]
         },
         {
@@ -164,13 +150,6 @@ data:
           "groups": [
             "/observability/grafana-grafana-admins",
             "/observability/zabbix-super-admins"
-          ],
-          "credentials": [
-            {
-              "type": "password",
-              "value": "$(env:OBSERVABILITY_ADMIN_PASSWORD)",
-              "temporary": false
-            }
           ]
         }
       ],
@@ -250,6 +229,8 @@ data:
           "clientId": "zabbix",
           "name": "Zabbix",
           "description": "Zabbix SAML client",
+          "defaultClientScopes": ["saml_organization"],
+          "optionalClientScopes": [],
           "enabled": true,
           "protocol": "saml",
           "publicClient": false,
@@ -327,7 +308,7 @@ data:
               "config": {
                 "attribute.name": "groups",
                 "attribute.nameformat": "Basic",
-                "single": "false",
+                "single": "true",
                 "full.path": "false"
               }
             }

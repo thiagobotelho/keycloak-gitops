@@ -40,6 +40,11 @@ replacements:
           name: rhbk-service-monitor
         fieldPaths:
           - spec.selector.matchLabels.app\.kubernetes\.io/instance
+      - select:
+          kind: ClusterRoleBinding
+          name: keycloak-operator-clusterrole-binding
+        fieldPaths:
+          - subjects.0.namespace
   - source:
       kind: ConfigMap
       name: env-cfg
