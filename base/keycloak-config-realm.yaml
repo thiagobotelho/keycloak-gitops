@@ -16,7 +16,6 @@ data:
       "loginWithEmailAllowed": true,
       "duplicateEmailsAllowed": false,
       "sslRequired": "external",
-
       "roles": {
         "realm": [
           {
@@ -224,12 +223,13 @@ data:
             }
           ]
         },
-
         {
           "clientId": "zabbix",
           "name": "Zabbix",
           "description": "Zabbix SAML client",
-          "defaultClientScopes": ["saml_organization"],
+          "defaultClientScopes": [
+            "saml_organization"
+          ],
           "optionalClientScopes": [],
           "enabled": true,
           "protocol": "saml",
@@ -310,6 +310,40 @@ data:
                 "attribute.nameformat": "Basic",
                 "single": "true",
                 "full.path": "false"
+              }
+            }
+          ]
+        },
+        {
+          "clientId": "openshift",
+          "name": "OpenShift CRC",
+          "protocol": "openid-connect",
+          "enabled": true,
+          "publicClient": false,
+          "standardFlowEnabled": true,
+          "implicitFlowEnabled": false,
+          "directAccessGrantsEnabled": false,
+          "redirectUris": [
+            "https://oauth-openshift.apps-crc.testing/oauth2callback/keycloak"
+          ],
+          "webOrigins": [
+            "https://oauth-openshift.apps-crc.testing"
+          ],
+          "defaultClientScopes": [
+            "profile",
+            "email"
+          ],
+          "protocolMappers": [
+            {
+              "name": "groups",
+              "protocol": "openid-connect",
+              "protocolMapper": "oidc-group-membership-mapper",
+              "config": {
+                "full.path": "false",
+                "id.token.claim": "true",
+                "access.token.claim": "true",
+                "userinfo.token.claim": "true",
+                "claim.name": "groups"
               }
             }
           ]

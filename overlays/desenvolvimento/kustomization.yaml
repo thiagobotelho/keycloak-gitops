@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - keycloak-issuer-ca.yaml
 
 namespace: keycloak-dev
 
@@ -123,3 +124,6 @@ labels:
       app.kubernetes.io/managed-by: argocd
       app.kubernetes.io/environment: desenvolvimento
     includeSelectors: false
+
+patches:
+  - path: keycloak-import-tls.yaml
