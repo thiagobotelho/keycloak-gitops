@@ -231,3 +231,7 @@ detalhes em `docs/AMBIENTES.md`.
 ## Licença
 
 [MIT](LICENSE)
+
+## Manual de operação
+
+Consulte [docs/OPERACAO.md](docs/OPERACAO.md) para os procedimentos de configuração, verificação e manutenção.
