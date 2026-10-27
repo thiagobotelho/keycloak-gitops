@@ -5,6 +5,8 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
+  # Seletores precisam corresponder aos labels dos recursos de destino.
+  # Seletores precisam corresponder aos labels dos recursos de destino.
   selector:
     app: postgresql-db
   type: ClusterIP
@@ -23,6 +25,8 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   serviceName: postgresql-db
+  # Número de instâncias; réplicas isoladamente não garantem alta disponibilidade.
+  # Número de instâncias; réplicas isoladamente não garantem alta disponibilidade.
   replicas: 1
   selector:
     matchLabels:
@@ -55,11 +59,15 @@ spec:
                 secretKeyRef:
                   name: keycloak-db-secret
                   key: database
+          # Prontidão controla recebimento de tráfego, sem provar integrações externas.
+          # Prontidão controla recebimento de tráfego, sem provar integrações externas.
           readinessProbe:
             exec:
               command: [/bin/sh, -c, pg_isready -U "$POSTGRESQL_USER"]
             initialDelaySeconds: 10
             periodSeconds: 10
+          # Falha desta sonda pode reiniciar o container; evite depender de serviços externos.
+          # Falha desta sonda pode reiniciar o container; evite depender de serviços externos.
           livenessProbe:
             tcpSocket:
               port: postgres
@@ -75,6 +83,8 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/lib/pgsql/data
+  # Cada réplica mantém seu volume; remover o workload não é um plano de recuperação.
+  # Cada réplica mantém seu volume; remover o workload não é um plano de recuperação.
   volumeClaimTemplates:
     - metadata:
         name: data

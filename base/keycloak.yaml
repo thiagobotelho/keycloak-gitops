@@ -38,6 +38,8 @@ spec:
       value: service_name=keycloak-ENV-service,service_namespace=keycloak-ENV,namespace=keycloak-ENV,deployment_environment_name=crc
 
   # Recursos conservadores para CRC; produção exige sizing por carga.
+  # Recursos ou dependências desta seção; avaliar seu escopo antes de alterar.
+  # Recursos ou dependências desta seção; avaliar seu escopo antes de alterar.
   resources:
     requests:
       cpu: 500m
@@ -119,9 +121,13 @@ spec:
   serviceMonitor:
     enabled: false
 
+  # Prontidão controla recebimento de tráfego, sem provar integrações externas.
+  # Prontidão controla recebimento de tráfego, sem provar integrações externas.
   readinessProbe:
     periodSeconds: 10
     failureThreshold: 6
+  # Falha desta sonda pode reiniciar o container; evite depender de serviços externos.
+  # Falha desta sonda pode reiniciar o container; evite depender de serviços externos.
   livenessProbe:
     periodSeconds: 10
     failureThreshold: 3
