@@ -12,6 +12,8 @@ metadata:
 spec:
   scrapeProtocols:
     - OpenMetricsText1.0.0
+  # Seletores precisam corresponder aos labels dos recursos de destino.
+  # Seletores precisam corresponder aos labels dos recursos de destino.
   selector:
     matchLabels:
       app: keycloak

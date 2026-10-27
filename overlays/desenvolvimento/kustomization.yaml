@@ -5,6 +5,8 @@ resources:
   - ../../base
   - keycloak-issuer-ca.yaml
 
+# Namespace deste objeto; não confundir com seleção de namespaces de origem.
+# Namespace deste objeto; não confundir com seleção de namespaces de origem.
 namespace: keycloak-dev
 
 configMapGenerator:
