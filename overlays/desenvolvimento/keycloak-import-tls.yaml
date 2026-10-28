@@ -30,7 +30,6 @@ spec:
         - name: keycloak-trust
           mountPath: /trust
         # Restringe privilégios do processo; conferir compatibilidade com a SCC.
-        # Restringe privilégios do processo; conferir compatibilidade com a SCC.
         securityContext:
           allowPrivilegeEscalation: false
           runAsNonRoot: true

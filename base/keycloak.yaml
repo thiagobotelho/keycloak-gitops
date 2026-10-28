@@ -39,7 +39,6 @@ spec:
 
   # Recursos conservadores para CRC; produção exige sizing por carga.
   # Recursos ou dependências desta seção; avaliar seu escopo antes de alterar.
-  # Recursos ou dependências desta seção; avaliar seu escopo antes de alterar.
   resources:
     requests:
       cpu: 500m
@@ -122,11 +121,9 @@ spec:
     enabled: false
 
   # Prontidão controla recebimento de tráfego, sem provar integrações externas.
-  # Prontidão controla recebimento de tráfego, sem provar integrações externas.
   readinessProbe:
     periodSeconds: 10
     failureThreshold: 6
-  # Falha desta sonda pode reiniciar o container; evite depender de serviços externos.
   # Falha desta sonda pode reiniciar o container; evite depender de serviços externos.
   livenessProbe:
     periodSeconds: 10
