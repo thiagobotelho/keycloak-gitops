@@ -239,3 +239,47 @@ Consulte [docs/OPERACAO.md](docs/OPERACAO.md) para os procedimentos de configura
 ## Aprender a configuração
 
 Consulte o [guia comentado](docs/APRENDIZADO.md) para entender componentes, escolhas, testes positivos/negativos e reversão.
+
+## Acesso ao OpenShift
+
+O client `openshift` envia o claim `groups` sem caminho completo.
+
+| Grupo Keycloak | Membro inicial | Acesso no OpenShift |
+| --- | --- | --- |
+| openshift-viewers | Nenhum | Leitura nos projetos configurados |
+| openshift-project-admins | observability-admin | Administração nos projetos configurados |
+| openshift-cluster-admins | openshift-admin | Administração global mediante vínculo separado |
+
+Os grupos não concedem permissões sozinhos. Aplique os RoleBindings de
+`argocd-gitops/bootstrap/openshift-access` após criar os namespaces.
+O escopo inclui `grafana`, `zabbix`, `tempo`, `pyroscope`, `observability` e
+`observability-apps`. O vínculo global fica separado em `argocd-gitops/bootstrap/openshift-access/cluster-admin`.
+`admin` de projeto permite administrar recursos e ler Secrets nesse namespace;
+atribua o grupo somente a operadores autorizados.
+
+Para incluir uma conta existente, associe-a ao grupo em Keycloak > Users >
+Groups e registre a associação no manifesto do realm quando a conta for
+mantida por este repositório. Use `openshift-viewers` para leitura. Não
+mantenha os mesmos membros manualmente em objetos Group do OpenShift: o
+provedor OIDC sincroniza os grupos no login.
+
+Após sincronizar `keycloak-dev`, saia do console OpenShift e entre novamente
+pelo provedor `keycloak`. Use a senha atual do usuário; a alteração dos grupos
+não redefine senhas. Confira `oc get user` e `oc get groups` em uma sessão
+administrativa. Os grupos podem aparecer somente após o primeiro login de
+seus membros. A role do Argo CD é configurada separadamente.
+
+### Senha inicial de openshift-admin
+
+Crie `keycloak-dev/keycloak-openshift-users` com a chave
+`OPENSHIFT_ADMIN_PASSWORD` fora do Git. Depois da importação do realm:
+
+```bash
+python3 scripts/initialize-lab-passwords.py --initialize-missing
+```
+
+O utilitário é exclusivo do CRC padrão e inicializa somente contas sem senha;
+não rotaciona senhas existentes. Para o login, use a senha inicial definida
+ou a senha atual após alteração. Os valores não são impressos pelo utilitário.
+A conta `openshift-admin` recebe administração global apenas após aplicar o
+vínculo separado no OpenShift. Não use essa conta em aplicações ou automações.

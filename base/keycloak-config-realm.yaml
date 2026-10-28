@@ -114,6 +114,18 @@ data:
               ]
             }
           ]
+        },
+        {
+          "name": "openshift-viewers",
+          "path": "/openshift-viewers"
+        },
+        {
+          "name": "openshift-project-admins",
+          "path": "/openshift-project-admins"
+        },
+        {
+          "name": "openshift-cluster-admins",
+          "path": "/openshift-cluster-admins"
         }
       ],
       "users": [
@@ -148,7 +160,19 @@ data:
           "email": "observability-admin@local.dev",
           "groups": [
             "/observability/grafana-grafana-admins",
-            "/observability/zabbix-super-admins"
+            "/observability/zabbix-super-admins",
+            "/openshift-project-admins"
+          ]
+        },
+        {
+          "username": "openshift-admin",
+          "enabled": true,
+          "emailVerified": true,
+          "firstName": "OpenShift",
+          "lastName": "Admin",
+          "email": "openshift-admin@local.dev",
+          "groups": [
+            "/openshift-cluster-admins"
           ]
         }
       ],

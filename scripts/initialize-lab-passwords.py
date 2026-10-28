@@ -25,13 +25,13 @@ try:
  try:token=request('/realms/master/protocol/openid-connect/token','POST',form,form=True)['access_token']
  finally:admin.clear();form.clear()
  root='/admin/realms/observability';missing=[]
- for username,key in [('grafana-admin','GRAFANA_ADMIN_PASSWORD'),('zabbix-admin','ZABBIX_ADMIN_PASSWORD'),('observability-admin','OBSERVABILITY_ADMIN_PASSWORD')]:
+ for username,key in [('grafana-admin','GRAFANA_ADMIN_PASSWORD'),('zabbix-admin','ZABBIX_ADMIN_PASSWORD'),('observability-admin','OBSERVABILITY_ADMIN_PASSWORD'),('openshift-admin','OPENSHIFT_ADMIN_PASSWORD')]:
   users=request(root+'/users?'+urllib.parse.urlencode({'username':username,'exact':'true'}))
   if len(users)!=1:raise RuntimeError('Expected lab user missing or ambiguous')
   user=users[0];has_password=any(x['type']=='password' for x in request(root+'/users/'+user['id']+'/credentials'))
   if has_password:print(username+': existing password preserved');continue
   if not args.initialize_missing:missing.append(username);continue
-  seeds=secret('keycloak-dev','keycloak-observability-users');payload={'type':'password','temporary':False,'value':base64.b64decode(seeds[key]).decode()}
+  seeds=secret('keycloak-dev','keycloak-openshift-users' if username=='openshift-admin' else 'keycloak-observability-users');payload={'type':'password','temporary':False,'value':base64.b64decode(seeds[key]).decode()}
   try:request(root+'/users/'+user['id']+'/reset-password','PUT',payload)
   finally:seeds.clear();payload.clear()
   print(username+': missing initial password initialized without displaying value')
