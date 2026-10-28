@@ -13,7 +13,6 @@ spec:
   port:
     targetPort: http
   # TLS define transporte e confiança; não desabilitar validação para contornar erros.
-  # TLS define transporte e confiança; não desabilitar validação para contornar erros.
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
