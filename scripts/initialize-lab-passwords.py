@@ -3,7 +3,7 @@
 import argparse,base64,json,resource,ssl,subprocess,sys,urllib.request,urllib.parse,urllib.error
 resource.setrlimit(resource.RLIMIT_CORE,(0,0))
 parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--initialize-missing',action='store_true');args=parser.parse_args()
-OC=['oc','--context=crc-admin','--server=https://api.crc.testing:6443','--request-timeout=20s'];URL='https://keycloak-dev.apps-crc.testing';token=None
+OC=['oc','--request-timeout=20s'];URL='https://keycloak-dev.apps-crc.testing';token=None
 class NoRedirect(urllib.request.HTTPRedirectHandler):
  def redirect_request(self,*args,**kwargs):raise RuntimeError('Unexpected redirect')
 def secret(ns,name):
